@@ -40,7 +40,29 @@ Route::group([
 
     Route::get('general-settings','AdminController@show_general_settings');
 
-    
+    Route::post('add-cars', 'CarsController@add_cars')->name('add-cars');
+
+    Route::post('show_car', 'CarsController@show_car')->name('show_car');
+
+    Route::post('edit-car', 'CarsController@edit_car')->name('edit_car');
+
+    Route::get('delete_cars/{id}', 'CarsController@delete_cars')->name('delete_cars');
+
+    Route::get('filter_cars', 'CarsController@filter_cars')->name('filter_cars');
+
+    Route::post('add-driver', 'DriverController@addDriver')->name('add-driver');
+
+    Route::post('show_img', 'DriverController@show_img')->name('show_img');
+
+    Route::post('show_provider', 'DriverController@show_provider')->name('show_provider');
+
+    Route::get('chage_status_provider/{id}', 'DriverController@chage_status_provider')->name('chage_status_provider');
+
+    Route::post('edit-driver', 'DriverController@edit_driver')->name('edit-driver');
+
+    Route::get('delete_provider/{id}', 'DriverController@delete_provider')->name('delete_provider');
+
+
 
     
     
