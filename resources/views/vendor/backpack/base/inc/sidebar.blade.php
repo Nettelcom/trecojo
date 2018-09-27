@@ -24,6 +24,7 @@
             <li><a href="{{ url(config('backpack.base.route_prefix').'/request') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes</span></a></li>
               <li><a href="{{ url(config('backpack.base.route_prefix').'/car-types') }}"><i class="fa fa-car"></i> <span>Autos</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/providers') }}"><i class="fa fa-user-plus"></i> <span>Conductores</span></a></li>
+             <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Empresas</span></a></li>
               <li><a href="{{ url(config('backpack.base.route_prefix').'/owners') }}"><i class="fa fa-users"></i> <span>Usuarios</span></a></li>
              
                 <li><a href="{{ url(config('backpack.base.route_prefix').'/promo-codes') }}"><i class="fa fa-code"></i> <span>Promociones</span></a></li>

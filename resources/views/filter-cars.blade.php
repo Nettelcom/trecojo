@@ -73,37 +73,45 @@
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
-                                       for="inputPassword3" >Distancia Mínima</label>
+                                       for="inputPassword3" >Placa de Vehículo</label>
                                 <div class="col-sm-10">
-                                    <input type="text"  name="base_distance" class="form-control"
-                                           id="inputPassword3" placeholder="Distancia mínima"/>
+                                    <input type="text"  name="placa" class="form-control"
+                                           id="inputPassword3" placeholder="Place de Vehículo"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
-                                       for="inputPassword3" >Precio Mínimo</label>
+                                       for="inputPassword3" >Modelo</label>
                                 <div class="col-sm-10">
-                                    <input type="text"  name="minimum_fare" class="form-control"
-                                           id="inputPassword3" placeholder="Precio Mínimo"/>
+                                    <input type="text"  name="modelo" class="form-control"
+                                           id="inputPassword3" placeholder="Modelo"/>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
-                                       for="inputPassword3" >Precio por Km</label>
+                                       for="inputPassword3" >Color</label>
                                 <div class="col-sm-10">
-                                    <input type="text"  name="price_per_mile" class="form-control"
-                                           id="inputPassword3" placeholder="Precio por Km"/>
+                                    <input type="text"  name="color" class="form-control"
+                                           id="inputPassword3" placeholder="Color"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Año</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="anio" class="form-control"
+                                           id="inputPassword3" placeholder="Año"/>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label"
-                                       for="inputPassword3" >Precio por Tiempo</label>
-                                <div class="col-sm-10">
-                                    <input type="text"  name="price_per_time" class="form-control"
-                                           id="inputPassword3" placeholder="Precio por Tiempo"/>
-                                </div>
-                            </div>
+                            {{--<div class="form-group">--}}
+                                {{--<label class="col-sm-2 control-label"--}}
+                                       {{--for="inputPassword3" >Precio por Tiempo</label>--}}
+                                {{--<div class="col-sm-10">--}}
+                                    {{--<input type="text"  name="price_per_time" class="form-control"--}}
+                                           {{--id="inputPassword3" placeholder="Precio por Tiempo"/>--}}
+                                {{--</div>--}}
+                            {{--</div>--}}
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
                                        for="inputPassword3" >Asisentos</label>
@@ -139,10 +147,10 @@
                 <tr>
                     <th>#id</th>
                     <th>Marca</th>
-                    <th>Distancia minima</th>
-                    <th>Precio minimo</th>
-                    <th>Precio por Km</th>
-                    <th>Precio por Tiempo</th>
+                    {{--<th>Distancia minima</th>--}}
+                    <th>Modelo</th>
+                    <th>Color</th>
+                    <th>Año</th>
                     <th>Asientos</th>
                     <th>Estado</th>
                     <th style="text-align: center">Opciones</th>
@@ -153,12 +161,13 @@
                     <tr>
                         <td>{{$cartype->id}}</td>
                         <td>{{$cartype->type}}</td>
-                        <td>{{$cartype->base_distance}} miles</td>
-                        <td>{{$cartype->minimum_fare}}</td>
-                        <td>{{$cartype->price_per_mile}}</td>
-                        <td>{{$cartype->price_per_time}}</td>
+                        {{--<td>{{$cartype->base_distance}} miles</td>--}}
+                        <td>{{$cartype->modelo}}</td>
+                        <td>{{$cartype->color}}</td>
+                        <td>{{$cartype->anio}}</td>
                         <td>{{$cartype->seat_capacity}}</td>
-                        <td>                        <?php if ($cartype->visibility_status == 1) {
+                        <td>
+                            <?php if ($cartype->visibility_status == 1) {
 
                                 echo "<span class='badge bg-green'>visible</span>";
                             } elseif ($cartype->visibility_status == 0) {
@@ -217,37 +226,45 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Distancia Mínima</label>
+                                   for="inputPassword3" >Placa de Vehículo</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="base_distance" class="form-control"
-                                       id="distanc" placeholder="Distancia mínima"/>
+                                <input type="text"  name="placa" class="form-control"
+                                       id="inputPassword3" placeholder="Place de Vehículo"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Precio Mínimo</label>
+                                   for="inputPassword3" >Modelo</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="minimum_fare" class="form-control"
-                                       id="price_min" placeholder="Precio Mínimo"/>
+                                <input type="text"  name="modelo" class="form-control"
+                                       id="modelo" placeholder="Modelo"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Precio por Km</label>
+                                   for="inputPassword3" >Color</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="price_per_mile" class="form-control"
-                                       id="price_mile" placeholder="Precio por Km"/>
+                                <input type="text"  name="color" class="form-control"
+                                       id="color" placeholder="Color"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Año</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="anio" class="form-control"
+                                       id="anio" placeholder="Año"/>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Precio por Tiempo</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="price_per_time" class="form-control"
-                                       id="price_time" placeholder="Precio por Tiempo"/>
-                            </div>
-                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Precio por Tiempo</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="price_per_time" class="form-control"--}}
+                                       {{--id="price_time" placeholder="Precio por Tiempo"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
                                    for="inputPassword3" >Asientos</label>
@@ -300,10 +317,10 @@
                     success: function (data) {
                         id_car_edit.value = data.id;
                         type.value = data.type;
-                        distanc.value = data.base_distance;
-                        price_min.value = data.minimum_fare;
-                        price_mile.value = data.price_per_mile;
-                        price_time.value = data.price_per_time;
+                        // distanc.value = data.base_distance;
+                        modelo.value = data.modelo;
+                        color.value = data.color;
+                        anio.value = data.anio;
                         seat.value = data.seat_capacity;
                         let status = data.visibility_status
                         if(status == 1) {
@@ -319,10 +336,10 @@
         $('#showCar').on('hidden.bs.modal', function () {
             id_car_edit.value = "";
             type.value = "";
-            distanc.value = "";
-            price_min.value = "";
-            price_mile.value = "";
-            price_time.value = "";
+            // distanc.value = "";
+            marca.value = "";
+            color.value = "";
+            anio.value = "";
             seat.value = "";
             visibility_status.checked = false
 

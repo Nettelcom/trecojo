@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CarCompanyController;
+use App\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Request as Req;
@@ -32,13 +34,18 @@ class AdminController extends Controller
         return view('providers',compact('providers'));
     }
     public function show_car_types(){
-        $cartypes=Cartype::paginate(10);
-        return view('car-types',compact('cartypes'));
+        $cartypes = Cartype::paginate(10);
+        $carCompanies = CarCompanyController::paginate(10);
+        return view('car-types',compact('cartypes', 'carCompanies'));
     }
     public function show_map_view(){
         return view('maps');
     }
     public function show_general_settings(){
         return view('settings');
+    }
+    public  function show_company() {
+        $companies = Company::simplePaginate(10);
+        return view('company', compact('companies'));
     }
 }

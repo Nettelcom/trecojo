@@ -34,6 +34,9 @@ Route::group([
 
     Route::get('providers','AdminController@show_providers');
 
+    Route::get('company','AdminController@show_company');
+
+
     Route::get('car-types','AdminController@show_car_types');
 
     Route::get('maps','AdminController@show_map_view');
@@ -61,6 +64,25 @@ Route::group([
     Route::post('edit-driver', 'DriverController@edit_driver')->name('edit-driver');
 
     Route::get('delete_provider/{id}', 'DriverController@delete_provider')->name('delete_provider');
+
+    Route::post('add_car_provider', 'DriverController@add_car_provider')->name('add_car_provider');
+
+    Route::get('consult_ruc', 'DriverController@ruc')->name('ruc');
+
+    Route::post('add_company', 'CompanyController@add_company')->name('add_company');
+
+    Route::get('delete_cars_company/{id}', 'CompanyController@delete_cars_company')->name('delete_cars_company');
+
+    Route::post('show_car_company', 'CompanyController@show_car_company')->name('show_car_company');
+
+    Route::post('add_car_company', 'CompanyController@add_car_company')->name('add_car_company');
+
+    Route::post('delete_company/{id}', 'CompanyController@delete_company')->name('delete_company');
+
+
+
+
+
 
 
 

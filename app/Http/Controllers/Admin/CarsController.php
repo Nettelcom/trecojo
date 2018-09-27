@@ -12,10 +12,11 @@ class CarsController extends Controller
         $visible = 1;
         $car = new Cartype;
         $car->type = $request->input('type');
-        $car->base_distance = $request->input('base_distance');
-        $car->minimum_fare = $request->input('minimum_fare');
-        $car->price_per_mile = $request->input('price_per_mile');
-        $car->price_per_time = $request->input('price_per_time');
+//        $car->base_distance = $request->input('base_distance');
+//        $car->marca = $request->input('marca');
+        $car->modelo = $request->input('modelo');
+        $car->color = $request->input('color');
+        $car->anio = $request->input('anio');
         $car->seat_capacity = $request->input('seat_capacity');
         $car->placa = $request->input('placa');
         $car->visibility_status = $visible;
@@ -37,10 +38,11 @@ class CarsController extends Controller
         }
        $car = \App\Cartype::find($request->input('id'));
         $car->type = $request->input('type');
-        $car->base_distance = $request->input('base_distance');
-        $car->minimum_fare = $request->input('minimum_fare');
-        $car->price_per_mile = $request->input('price_per_mile');
-        $car->price_per_time = $request->input('price_per_time');
+//        $car->base_distance = $request->input('base_distance');
+//        $car->marca = $request->input('marca');
+        $car->modelo = $request->input('modelo');
+        $car->color = $request->input('color');
+        $car->anio = $request->input('anio');
         $car->seat_capacity = $request->input('seat_capacity');
         $car->placa = $request->input('placa');
         $car->visibility_status = $visibility;
