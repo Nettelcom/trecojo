@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CarCompanyController;
+use App\Clients;
 use App\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,7 @@ use App\Request as Req;
 use App\Owner;
 use App\Provider;
 use App\Cartype;
+use Illuminate\Support\Facades\DB;
 
 
 class AdminController extends Controller
@@ -21,9 +23,11 @@ class AdminController extends Controller
         return redirect(config('backpack.base.route_prefix').'/dashboard');
     }
     public function show_requests(){
-        $req=Req::all();
-        $req=$req->load('provider','owner');
-        return view('request',compact('req'));
+        $req = Req::all()->where('active',1);
+        $providers = Provider::all();
+        $payments = DB::table('type_payments')->get();
+        $clients = Clients::all();
+        return view('request',compact('req', 'providers','payments', 'clients'));
     }
      public function show_owners(){
         $users=Owner::simplePaginate(10);

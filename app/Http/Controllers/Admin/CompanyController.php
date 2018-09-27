@@ -22,18 +22,9 @@ class CompanyController extends Controller
             'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required',
-            'anio' => "required",
-            'type' => "required",
-            'color' => "required",
-            'seat_capacity' => "required",
-            'placa' => "required"
         ];
         $messages = [
-            'type.required' => "El tipo es requerido",
-            'color.required' => "El color  es requerido",
-            'anio.required' => "El año es  requerido",
-            'seat_capacity.required' => "La capacidad del vehículo es requerida",
-            'placa.required' => "La placa es requerida",
+
             'first_name.required' => "El nombre es requerido",
             'last_name.required' => "El apellido es requerido",
             'email.required' => "El correo es requerido",
@@ -62,19 +53,6 @@ class CompanyController extends Controller
             $company->email = $request->input('email');
             $company->status = $approval_status;
             $company->save();
-
-            $idCompany = $company->id;
-            $carC = new CarCompanyController;
-            $carC->placa = $request->input('placa');
-            $carC->color = $request->input('color');
-            $carC->type = $request->input('type');
-            $carC->modelo = $request->input('modelo');
-            $carC->anio = $request->input('anio');
-            $carC->placa = $request->input('placa');
-            $carC->id_emp = $idCompany;
-            $carC->seat_capacity = $request->input('seat_capacity');
-            $carC->save();
-
 
             return back();
 //            dd($request->input('ruc_number'));
@@ -128,8 +106,75 @@ class CompanyController extends Controller
 
     }
     public  function delete_company($id) {
-        $company = CarCompanyController::find($id);
+        $company = Company::find($id);
         $company->delete();
         return back();
     }
+    public  function show_edit_company(Request $request) {
+        if($request->ajax()) {
+            $company =  Company::find($request->input('idCom'));
+            return response()->json($company);
+        }
+    }
+    public  function  change_status_company($id) {
+        $status = 0;
+        $company = Company::find($id);
+        if($company->status == 0) {
+            $status = 1;
+        }
+        $company->status = $status;
+        $company->save();
+        return back();
+    }
+    public  function update_company(Request $request)
+    {
+
+
+        $rules = [
+            'ruc_number' => 'required|min:11',
+            'r_social' => 'required',
+            'departamento' => 'required',
+            'provincia' => 'required',
+            'distrito' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'phone' => 'required',
+            'email' => 'required',
+        ];
+        $messages = [
+
+            'first_name.required' => "El nombre es requerido",
+            'last_name.required' => "El apellido es requerido",
+            'email.required' => "El correo es requerido",
+            'r_social.required' => 'El RUC es requerido',
+            'phone.required' => 'El número de teléfono es requerido'
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        } else {
+
+
+            $approval_status = 0;
+            if ($request->input('approval_status') == "on") {
+                $approval_status = 1;
+            }
+            $company = Company::find($request->input('idCompany'));
+            $rc = $request->input('ruc_number');
+            $company->ruc = $rc;
+            $company->r_social = $request->input('r_social');
+            $company->departamento = $request->input('departamento');
+            $company->provincia = $request->input('provincia');
+            $company->distrito = $request->input('distrito');
+            $company->address = $request->input('direccion');
+            $company->first_name = $request->input('first_name');
+            $company->last_name = $request->input('last_name');
+            $company->phone = $request->input('phone');
+            $company->email = $request->input('email');
+            $company->status = $approval_status;
+            $company->save();
+            return back();
+        }
+    }
+
 }

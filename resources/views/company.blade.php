@@ -89,11 +89,11 @@
                             <?php
                             if ($company->status == 1):
                             ?>
-                            <a href='{{route("chage_status_provider",[$company->id])}}' class='btn btn-success'>Aprovado</a>
+                            <a href='{{route("change_status_company",[$company->id])}}' class='btn btn-success'>Aprovado</a>
                             <?php
                             elseif ($company->approval_status == 0) :
                             ?>
-                            <a  href='{{route("chage_status_provider",[$company->id])}}'  class="btn btn-danger btn-sm">Pendiente</a>
+                            <a  href='{{route("change_status_company",[$company->id])}}'  class="btn btn-danger btn-sm">Pendiente</a>
                             <?php
                             endif
                             ?></td>
@@ -101,8 +101,8 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
                                     <span class="fa fa-caret-down"></span></button>
                                 <ul class="dropdown-menu">
-                                    <li><a data-target="#addCars" id="{{$company->id}}" class="addCarsBtn" data-toggle="modal">Agregar Vehículo</a></li>
-                                    <li><a  class="btn_edit"  data-toggle="modal" id="{{$company->id}}" data-target="#showProvider" href="">Editar</a></li>
+                                    {{--<li><a data-target="#addCars" id="{{$company->id}}" class="addCarsBtn" data-toggle="modal">Agregar Vehículo</a></li>--}}
+                                    <li><a  class="btn_edit btnEditCompany"  data-toggle="modal" id="{{$company->id}}" data-target="#updateCompany" href="">Editar</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{route('delete_company', [$company->id])}}">Eliminar</a></li>
                                 </ul>
@@ -142,14 +142,14 @@
                             <input type="hidden" name="idProvider" id="idProvider">
                         {{@csrf_field() }}
                         <!-- Nav tabs -->
-                            <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active"><a href="#Conductor" aria-controls="uploadTab" role="tab" data-toggle="tab">Conductor</a>
+                            {{--<ul class="nav nav-tabs" role="tablist">--}}
+                                {{--<li role="presentation" class="active"><a href="#Conductor" aria-controls="uploadTab" role="tab" data-toggle="tab">Conductor</a>--}}
 
-                                </li>
-                                <li role="presentation"><a href="#Auto" aria-controls="browseTab" role="tab" data-toggle="tab">Auto</a>
+                                {{--</li>--}}
+                                {{--<li role="presentation"><a href="#Auto" aria-controls="browseTab" role="tab" data-toggle="tab">Auto</a>--}}
 
-                                </li>
-                            </ul>
+                                {{--</li>--}}
+                            {{--</ul>--}}
                             <!-- Tab panes -->
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="Conductor">
@@ -272,63 +272,7 @@
                                     {{--FIN MODAL CONDUCTOR--}}
 
 
-                                </div>
-                                <div role="tabpanel" class="tab-pane" id="Auto">
-                                    {{--MODAL AUTO--}}
 
-                                    <div class="modal-body">
-
-                                        <div class="form-group">
-                                            <label  class="col-sm-2 control-label"
-                                                    for="inputEmail3">Tipo</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="type" class="form-control"
-                                                       id="type" placeholder="Tipo"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Placa de Vehículo</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="placa" class="form-control"
-                                                       id="inputPassword3" placeholder="Place de Vehículo"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Modelo</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="modelo" class="form-control"
-                                                       id="modelo" placeholder="Modelo"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Color</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="color" class="form-control"
-                                                       id="color" placeholder="Color"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Año</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="anio" class="form-control"
-                                                       id="anio" placeholder="Año"/>
-                                            </div>
-                                        </div>
-                                        {{--<div class="form-group">--}}
-
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Asientos</label>
-                                            <div class="col-sm-10">
-                                                <input type="text"  name="seat_capacity" class="form-control"
-                                                       id="seat_capacity" placeholder="Asientos"/>
-                                            </div>
-                                        </div>
-                                    </div>
                                     {{--FIN MODAL AUTO--}}
                                 </div>
                             </div>
@@ -345,7 +289,7 @@
                 </div>
             </div>
         </div></div>
-    <div class="modal fade" id="addCars" tabindex="-1" role="dialog"
+    <div class="modal fade" id="updateCompany" tabindex="-1" role="dialog"
          aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -364,64 +308,124 @@
                 <!-- Modal Body -->
                 <div class="modal-body">
 
-                    <form class="form-horizontal" action="{{route('add_car_company')}}" method="post">
+                    <form class="form-horizontal" action="{{route('update_company')}}" method="post">
                         <input type="hidden" id="idCompany" name="idCompany">
                         {{@csrf_field() }}
                         <div class="form-group">
-                            <label  class="col-sm-2 control-label"
-                                    for="inputEmail3">Tipo</label>
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Numero de RUC</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="type" class="form-control"
-                                       id="inputEmail3" placeholder="Tipo"/>
+                                <input type="text" required name="ruc_number" class="form-control"
+                                       id="ruc_number_edit" placeholder="Ingrese el número de RUC"/>
+                                <p id="response_ruc_update" style="color: red"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Razón social</label>
+                            <div class="col-sm-10">
+                                <input type="text" required readonly  name="r_social" class="form-control"
+                                       id="r_social_update" placeholder="Nombre o Razón Social"/>
+                            </div>
+                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label   class="col-sm-2 control-label"--}}
+                                     {{--for="inputEmail3">Estado</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text" required readonly  name="estado" class="form-control"--}}
+                                       {{--id="estado_update" placeholder="Estado"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        <div class="form-group">
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Departamento</label>
+                            <div class="col-sm-10">
+                                <input type="text" required readonly  name="departamento" class="form-control"
+                                       id="departamento_update" placeholder="Departamento"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Provincia</label>
+                            <div class="col-sm-10">
+                                <input type="text" required readonly name="provincia" class="form-control"
+                                       id="provincia_update" placeholder="Provincia"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Distrito</label>
+                            <div class="col-sm-10">
+                                <input type="text" required readonly name="distrito" class="form-control"
+                                       id="distrito_update" placeholder="Distrito"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label   class="col-sm-2 control-label"
+                                     for="inputEmail3">Dirección</label>
+                            <div class="col-sm-10">
+                                <input type="text" required readonly name="direccion" class="form-control"
+                                       id="direccion_update" placeholder="Direecion"/>
+
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Modelo</label>
+                                   for="inputPassword3" >Nombres</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="modelo" class="form-control"
-                                       id="placa" placeholder="Place de Vehículo"/>
+                                <input type="text" required name="first_name" class="form-control"
+                                       id="first_name_update" placeholder="Apellidos"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Númeo de Placa</label>
+                                   for="inputPassword3" >Apellidos</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="placa" class="form-control"
-                                       id="inputPassword3" placeholder="Número de Placa"/>
+                                <input type="text" required name="last_name" class="form-control"
+                                       id="last_name_update" placeholder="Apellidos"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Color</label>
+                                   for="inputPassword3" >Email</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="color" class="form-control"
-                                       id="inputPassword3" placeholder="Color"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Año</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="anio" class="form-control"
-                                       id="inputPassword3" placeholder="Año"/>
+                                <input type="text"  required name="email" class="form-control"
+                                       id="email_update" placeholder="Correo Electrónico"/>
                             </div>
                         </div>
 
+
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Asientos</label>
+                                   for="inputPassword3" >Celular</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="seat_capacity" class="form-control"
-                                       id="inputPassword3" placeholder="Asientos"/>
+                                <input type="text"   name="phone" class="form-control"
+                                       id="phone_update" placeholder="Número de Celular"/>
                             </div>
                         </div>
+                        {{--<div class="form-group">--}}
+                        {{--<label class="col-sm-2 control-label"--}}
+                        {{--for="inputPassword3" >Imagen</label>--}}
+                        {{--<div class="col-sm-10">--}}
+                        {{--<input type="file"  name="picture" class="form-control"--}}
+                        {{--id="picture" placeholder="Asientos"/>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+
+                        <label class="col-sm-2 control-label"
+                               for="inputPassword3" >Estado</label>
+                        <div class="col-sm-10" >
+                            <input type="checkbox" style="position:relative;top:  5px;"  class="form-check-input" name="approval_status"
+                                   id="approval_status_update" />
+                        </div>
+
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default"
                                     data-dismiss="modal">
                                 Cerrar
                             </button>
-                            <input type="submit" value="Registrar" class="btn btn-primary">
+                            <input type="submit" value="Actualizar" class="btn btn-primary">
                         </div>
                     </form>
 
@@ -475,10 +479,66 @@
 
                             })
                         })
-                        const addCarsBtn = document.querySelectorAll(".addCarsBtn")
-                        for(let i = 0; i < addCarsBtn.length; i++){
-                            addCarsBtn[i].addEventListener('click', function () {
-                                idCompany.value =  addCarsBtn[i].id
+                        ruc_number_edit.addEventListener('blur', function () {
+                            $.ajax({
+                                url: 'consult_ruc',
+                                data: { ruc_value : ruc_number_edit.value },
+                                dataType: 'JSON',
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                success: function (data) {
+
+                                    if( data.success === false) {
+                                        response_ruc_update.textContent =  data.error
+                                        r_social_update.value = ""
+                                        departamento_update.value = ""
+                                        provincia_update.value = ""
+                                        distrito_update.value = ""
+                                        direccion_update.value = ""
+                                        // estado_update.value = ""
+                                    }
+                                    if(data.success === true) {
+                                        r_social_update.value = data.nombre_o_razon_social
+                                        departamento_update.value = data.departamento
+                                        provincia_update.value = data.provincia
+                                        distrito_update.value = data.distrito
+                                        direccion_update.value = data.direccion_completa
+                                        // estado_update.value = data.estado_del_contribuyente
+                                        response_ruc_update.textContent =  ""
+                                    }
+                                }
+
+                            })
+                        })
+                        const btnEditCompany = document.querySelectorAll(".btnEditCompany")
+                        for(let i = 0; i < btnEditCompany.length; i ++) {
+                            btnEditCompany[i].addEventListener('click', function () {
+                                idCompany.value = btnEditCompany[i].id
+                                let idCom = btnEditCompany[i].id
+                                $.ajax({
+                                    url: 'show_edit_company',
+                                    data: {idCom: idCom},
+                                    method: 'POST',
+                                    dataType: 'JSON',
+                                    success: function (data) {
+                                        approval_status_update.checked = false
+                                        ruc_number_edit.value = data.ruc
+                                        r_social_update.value = data.r_social
+                                        departamento_update.value = data.departamento
+                                        provincia_update.value = data.provincia
+                                        distrito_update.value = data.distrito
+                                        direccion_update.value = data.address
+                                        first_name_update.value = data.first_name
+                                        last_name_update.value = data.last_name
+                                        email_update.value = data.email
+                                        phone_update.value = data.phone
+                                        if(data.status == 1){
+                                            approval_status_update.checked = true
+                                        }
+                                    }
+                                })
                             })
                         }
                     </script>

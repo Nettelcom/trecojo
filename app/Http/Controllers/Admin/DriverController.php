@@ -171,7 +171,7 @@ class DriverController extends Controller
 //            return json_encode();
         }
         $ruta = "https://ruc.com.pe/api/v1/ruc";
-        $token = "a2445df4-5a39-43aa-8a94-000ab3ad2961-50252a7a-ad97-4548-ad3f-64ad495aa1b0";
+        $token = "b87adb2f-077f-453c-ab65-cac2f890b38b-09adc56f-c183-4f5c-ade0-13776f5b0562";
 
 
 

@@ -46,52 +46,76 @@
                   <th>Precio</th>
                   <th>Tipo de Pago</th>
                   <th>Cancelado?</th>
+                  <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  <td>12221</td>
-                  <td>Vicente Chacha</td>
-                  <td>Victoria Rojas</td>
-                  <td>1/1/2017</td>
-                  <td>completado</td>
-                  <td>3.5</td>
-                  <td>Contado</td>
-                  <td><span class="label label-warning">Falta cancelar</span></td>
-                </tr>
+
                 @foreach($req as $request)
+                    <form action="update_data_request" method="post">
+                        {{@csrf_field()}}
+                        <input type="hidden" name="idRequest" value="{{$request->id}}">
                 <tr>
-                  <td>{{$request->id}}</td>
-                  <td>{{$request->owner->first_name }} {{$request->owner->last_name}} </td>
-                  <td>{{$request->provider->first_name }} 
-                  {{$request->provider->last_name}} </td>
-                  <td>{{$request->date_time}}</td>
-                  <td><?php
-                        if ($request->ride_status == 1) {
+                    <td>{{$request->id}}</td>
+                    <td>
+                            @foreach($clients as $client)
+                                @if($request->client_id == $client->id)
+                                    {{$client->first_name}}  {{$client->last_name}}
+                                 @endif
 
-                            echo "<span class='badge bg-green'>completado</span>";
-                        } elseif ($request->ride_status == 0) {
-                            echo "<span class='badge bg-red'>falta completar</span>";
-                        }
-                        ?></td>
-                  <td>{{$request->cost_amount}}</td>
-                  <td><?php
-                        if ($request->payment_type == 1) {
+                            @endforeach
+                    </td>
+                    <td><select class="form-control" name="provider_id" id="">
+                            <option value="">Seleccione un Conductor</option>
+                        @foreach($providers as $provider)
+                                <option value="{{$provider->id}}"
+                                @if($provider->id == $request->provider_id)
+                                        selected="selected"
+                                        @endif
+                                >{{$provider->first_name}}  {{$provider->last_name}}</option>
 
-                            echo "<span class='badge bg-yellow'>Contado</span>";
-                        } elseif ($request->payment_type == 2) {
-                            echo "<span class='badge bg-blue'>tarjeta</span>";
-                        }
-                        ?></td>
-                  <td><?php
-                        if ($request->is_paid == 1) {
 
-                            echo "<span class='badge bg-green'>cancelado</span>";
-                        } elseif ($request->is_paid == 0) {
-                            echo "<span class='badge bg-red'Falta cancelar</span>";
-                        }
-                        ?></td>
+                         @endforeach
+                        </select>
+
+                    </td>
+                    <td>{{$request->date_request}}</td>
+                    <td>
+                        @if($request->status_request == 0)
+                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-danger">En curso</a>
+                         @else
+                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-success">Terminado</a>
+                        @endif
+                    </td>
+                    <td><input type="text" name="cost_amount" value="{{$request->cost_amount}}"></td>
+                    <td>
+                        <select class="form-control" name="payment_type_id" id="">
+                            <option value="">Tipo de Pago</option>
+                                @foreach($payments as $payment)
+                                <option value="{{$payment->id}}"
+                                    @if($request->payment_type_id == $payment->id)
+                                        selected="selected"
+                                     @endif
+                                >{{$payment->type_payment}}</option>
+
+                                @endforeach
+                        </select>
+                    </td>
+                    <td>
+                        @if($request->is_paint == 0)
+                            <a href="{{route("change_is_payment_request",[$request->id])}}" class="btn btn-danger">No</a>
+                        @else
+                            <a href="{{route("change_is_payment_request",[$request->id])}}"class="btn btn-success">Si</a>
+                        @endif
+
+                    </td>
+                    <td>
+                        {{--<button data-toggle="modal" data-target="#showCar" class="btn btn-success btn-edit" ><i class="fa fa-edit"></i> Grabar</button>--}}
+                        <input type="submit" value="Grabar" class="btn btn-success">
+                        <a href="{{route("delete_request", [$request->id])}}" class="btn btn-danger" ><i class="fa fa-edit"></i> Eliminar</a> </td>
+                    </td>
                 </tr>
+                    </form>
                 @endforeach
                </tbody>
 
@@ -102,3 +126,4 @@
            
           </div>
 @endsection
+

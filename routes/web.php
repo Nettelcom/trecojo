@@ -77,17 +77,35 @@ Route::group([
 
     Route::post('add_car_company', 'CompanyController@add_car_company')->name('add_car_company');
 
-    Route::post('delete_company/{id}', 'CompanyController@delete_company')->name('delete_company');
+    Route::get('delete_company/{id}', 'CompanyController@delete_company')->name('delete_company');
+
+    Route::post('show_edit_company', 'CompanyController@show_edit_company')->name('show_edit_company');
+
+    Route::get('change_status_company/{id}', 'CompanyController@change_status_company')->name('change_status_company');
+
+    Route::post('update_company', 'CompanyController@update_company')->name('update_company');
+
+    Route::get('clients', 'ClientsController@show_clients')->name('show_clients');
+
+    Route::post('add_clients', 'ClientsController@add_clients')->name('add_clients');
+
+    Route::get('delete_client/{id}', 'ClientsController@delete_client')->name('delete_client');
+
+    Route::post('get_information_client', 'ClientsController@get_information_client')->name('get_information_client');
+
+    Route::post('update_client', 'ClientsController@update_client')->name('update_client');
+
+    Route::post('update_data_request', 'RequestController@update_data_request')->name('update_data_request');
+
+    Route::get('change_state_request/{id}', 'RequestController@change_state_request')->name('change_state_request');
+
+    Route::get('change_is_payment_request/{id}', 'RequestController@change_is_payment_request')->name('change_is_payment_request');
+
+    Route::get('delete_request/{id}', 'RequestController@delete_request')->name('delete_request');
+
+//    Route::post('/api/user', 'InteractiveController@addUser')->name('addUser');
 
 
-
-
-
-
-
-
-    
-    
 });
 
 Route::get('/admin/payments', function () {
