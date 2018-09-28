@@ -159,7 +159,7 @@
                     <!-- Modal Body -->
                     <div class="modal-body">
 
-                        <form class="form-horizontal" action="{{route('add_request_modal')}}" id="frm_client" method="post">
+                        <form class="form-horizontal" action="{{route('add_request_modal_company')}}" id="frm_client" method="post">
                             {{@csrf_field() }}
                             <input type="hidden" id="" name="idRequest">
                             <div class="form-group">

@@ -4,20 +4,23 @@ namespace App\Http\Controllers\Api;
 
 use App\Clients;
 use App\Company;
-use Illuminate\Http\Request;
+use App\Request;
+use App\RequestCompany;
+use Illuminate\Http\Request as Rq;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class UseraController extends Controller
 {
-    public  function addUser(Request $request) {
+    public  function addUser(Rq $request) {
         $rules = [
             'first_name' => 'required',
             'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required',
             'departamento' => 'required',
+            'pwd_client' => 'required',
             'provincia' => 'required',
             'distrito' => 'required',
         ];
@@ -26,6 +29,7 @@ class UseraController extends Controller
             'last_name.required' => 'apellido requerido',
             'phone.required' => 'apellido requerido',
             'email.required' => 'apellido requerido',
+            'pwd_client.required' => 'contraseña requerido',
             'departamento.required' => 'apellido requerido',
             'provincia.required' => 'apellido requerido',
             'distrito.required' => 'apellido requerido',
@@ -56,7 +60,7 @@ class UseraController extends Controller
 
         return Response::json($response);
     }
-    public  function addCompany(Request $request) {
+    public  function addCompany(Rq $request) {
         $rucaconsultar = $request->input('ruc');
         $company = Company::where('ruc', $rucaconsultar )->get();
         if(count($company) > 0) {
@@ -68,9 +72,6 @@ class UseraController extends Controller
         }else {
                 $ruta = "https://ruc.com.pe/api/v1/ruc";
                 $token = "b87adb2f-077f-453c-ab65-cac2f890b38b-09adc56f-c183-4f5c-ade0-13776f5b0562";
-
-
-
                 $data = array(
                     "token"	=> $token,
                     "ruc"   => $rucaconsultar
@@ -100,7 +101,6 @@ class UseraController extends Controller
                        'status' => 500,
                        'message' => $leer_respuesta["error"]
                     ];
-//                    return Response::json($response);
                 }else {
                     $rules = [
                         'first_name' => 'required',
@@ -153,5 +153,81 @@ class UseraController extends Controller
         }
         return Response::json($response);
 
+    }
+    public function addRequestClient(Rq $request) {
+        $rules = [
+            'client_id' => 'required',
+            'payment_type_id' => 'required',
+            'start_address' => 'required',
+            'end_address' => 'required',
+            'date_arrive' => 'required',
+        ];
+        $messages = [
+            'client_id.required' => 'Id de Cliente Requerido',
+            'payment_type_id.required' => 'Tipo de Pago Requerido',
+            'start_address.required' => 'Origen Requerido',
+            'end_address.required' => 'Destino Requerido',
+            'date_arrive.required' => 'Hora de embarque requerido',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $response = [
+                'status' => 500,
+                'message' => $validator->messages()
+            ];
+
+        }else {
+            $req= new Request;
+            $req->client_id = $request->input('client_id');
+            $req->payment_type_id = $request->input('payment_type_id');
+            $req->start_address = $request->input('start_address');
+            $req->end_address = $request->input('end_address');
+            $req->date_arrive = $request->input('date_arrive');
+            $req->save();
+            $response = [
+                'status' => 201,
+                'id_request'  => $req->id
+            ];
+        }
+
+        return Response::json($response);
+    }
+
+    public  function  addRequestCompany(Rq $request) {
+        $rules = [
+            'client_id' => 'required',
+            'payment_type_id' => 'required',
+            'start_address' => 'required',
+            'end_address' => 'required',
+            'date_arrive' => 'required',
+        ];
+        $messages = [
+            'client_id.required' => 'Id de Cliente Requerido',
+            'payment_type_id.required' => 'Tipo de Pago Requerido',
+            'start_address.required' => 'Origen Requerido',
+            'end_address.required' => 'Destino Requerido',
+            'date_arrive.required' => 'Hora de embarque requerido',
+        ];
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $response = [
+                'status' => 500,
+                'message' => $validator->messages()
+            ];
+
+        }else {
+            $req= new RequestCompany;
+            $req->company_id = $request->input('client_id');
+            $req->payment_type_id = $request->input('payment_type_id');
+            $req->start_address = $request->input('start_address');
+            $req->end_address = $request->input('end_address');
+            $req->date_arrive = $request->input('date_arrive');
+            $req->save();
+            $response = [
+                'status' => 201,
+                'id_request'  => $req->id
+            ];
+        }
+        return Response::json($response);
     }
 }

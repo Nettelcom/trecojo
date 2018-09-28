@@ -92,18 +92,31 @@ class RequestController extends Controller
         return back();
     }
 
-    public  function add_request_modal(Rq $request) {
+    public  function add_request_modal_company(Rq $request) {
         $req= new RequestCompany;
         $new_date_arrive = date('Y-m-d\TH:i', strtotime($request->input('date_arrive')));
         $req->company_id = $request->input('client_id');
-        $req->payment_type_id = $request->input('client_id');
+        $req->payment_type_id = $request->input('payment_type_id');
+        $req->start_address = $request->input('start_address');
+        $req->end_address = $request->input('end_address');
+        $req->date_arrive = $new_date_arrive;
+        $req->save();
+        return back();
+
+    }
+
+
+    public  function add_request_modal_client(Rq $request) {
+        $req= new Request;
+        $new_date_arrive = date('Y-m-d\TH:i', strtotime($request->input('date_arrive')));
+        $req->client_id = $request->input('client_id');
+        $req->payment_type_id = $request->input('payment_type_id');
         $req->start_address = $request->input('start_address');
         $req->end_address = $request->input('end_address');
         $req->date_arrive = $new_date_arrive;
         $req->save();
         return back();
     }
-
 
 
 

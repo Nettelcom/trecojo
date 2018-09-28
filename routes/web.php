@@ -40,7 +40,6 @@ Route::group([
 
     Route::get('request-company','AdminController@show_request_company');
 
-
     Route::get('car-types','AdminController@show_car_types');
 
     Route::get('maps','AdminController@show_map_view');
@@ -115,9 +114,11 @@ Route::group([
 
     Route::post('get_request_company', 'RequestController@get_request_company')->name('get_request_company');
 
-    Route::post('add_request_modal', 'RequestController@add_request_modal')->name('add_request_modal');
+    Route::post('add_request_modal_client', 'RequestController@add_request_modal_client')->name('add_request_modal_client');
 
     Route::post('update_detail_request_company', 'RequestController@update_detail_request_company')->name('update_detail_request_company');
+
+    Route::post('add_request_modal_company', 'RequestController@add_request_modal_company')->name('add_request_modal_company');
 
     Route::post('details_request', 'RequestController@details_request')->name('details_request');
 
@@ -136,12 +137,6 @@ Route::group([
     Route::post('add_user', 'OwnerController@add_user')->name('add_user');
 
     Route::post('get_payments_for_type', 'PaymentController@get_payments_for_type')->name('get_payments_for_type');
-
-
-
-
-
-
 
 });
 
