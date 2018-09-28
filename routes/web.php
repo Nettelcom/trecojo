@@ -36,6 +36,10 @@ Route::group([
 
     Route::get('company','AdminController@show_company');
 
+    Route::get('payments','AdminController@show_payments');
+
+    Route::get('request-company','AdminController@show_request_company');
+
 
     Route::get('car-types','AdminController@show_car_types');
 
@@ -95,7 +99,27 @@ Route::group([
 
     Route::post('update_client', 'ClientsController@update_client')->name('update_client');
 
+    Route::post('update_client_pwd', 'ClientsController@update_client_pwd')->name('update_client_pwd');
+
     Route::post('update_data_request', 'RequestController@update_data_request')->name('update_data_request');
+
+    Route::post('update_detail_request', 'RequestController@update_detail_request')->name('update_detail_request');
+
+    Route::post('update_data_company_request', 'RequestController@update_data_company_request')->name('update_data_company_request');
+
+    Route::get('change_state_request_company/{id}', 'RequestController@change_state_request_company')->name('change_state_request_company');
+
+    Route::get('change_is_payment_request_company/{id}', 'RequestController@change_is_payment_request_company')->name('change_is_payment_request_company');
+
+    Route::get('delete_request_company/{id}', 'RequestController@delete_request_company')->name('delete_request_company');
+
+    Route::post('get_request_company', 'RequestController@get_request_company')->name('get_request_company');
+
+    Route::post('add_request_modal', 'RequestController@add_request_modal')->name('add_request_modal');
+
+    Route::post('update_detail_request_company', 'RequestController@update_detail_request_company')->name('update_detail_request_company');
+
+    Route::post('details_request', 'RequestController@details_request')->name('details_request');
 
     Route::get('change_state_request/{id}', 'RequestController@change_state_request')->name('change_state_request');
 
@@ -103,14 +127,25 @@ Route::group([
 
     Route::get('delete_request/{id}', 'RequestController@delete_request')->name('delete_request');
 
-//    Route::post('/api/user', 'InteractiveController@addUser')->name('addUser');
+    Route::post('show_update_user', 'OwnerController@show_update_user')->name('show_update_user');
+
+    Route::post('user_update', 'OwnerController@user_update')->name('user_update');
+
+    Route::get('delete_user/{id}', 'OwnerController@delete_user')->name('delete_user');
+
+    Route::post('add_user', 'OwnerController@add_user')->name('add_user');
+
+    Route::post('get_payments_for_type', 'PaymentController@get_payments_for_type')->name('get_payments_for_type');
+
+
+
+
+
 
 
 });
 
-Route::get('/admin/payments', function () {
-    return view('payments');
-});
+
 
 Route::get('/admin/promo-codes', function () {
     return view('promo');

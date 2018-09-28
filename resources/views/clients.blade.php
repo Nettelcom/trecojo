@@ -19,6 +19,28 @@
                 <div class="box-header with-border">
                     <div class="box-title">Clientes</div>
                 </div>
+                @if(count($errors) > 0)
+                    <div class="alert alert-danger alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{!! $error!!}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if(session('success'))
+                    <div class="alert alert-success alert-dismissible" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <ul>
+                            <li>{{session('success')}}</li>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -65,8 +87,9 @@
                         <td>{{$client->provincia}}</td>
                         <td>{{$client->distrito}}</td>
                         <td>
-                        <button data-toggle="modal" data-target="#updateClient" class="btn btn-success btn_edit" id="{{$client->id}}"><i class="fa fa-edit"></i> Editar</button>
-                        <a href="{{route("delete_client", [$client->id])}}" class="btn btn-danger" ><i class="fa fa-edit"></i> Eliminar</a>
+                        <button title="Actualizar Datos" data-toggle="modal" data-target="#updateClient" class="btn btn-success btn_edit" id="{{$client->id}}"><i class="fa fa-edit"></i> </button>
+                        <button title="Cambiar Contraseña" data-toggle="modal" data-target="#updatePwd" class="btn btn-warning btn_pwd_update" id="{{$client->id}}"><i class="fa fa-key"></i></button>
+                        <a href="{{route("delete_client", [$client->id])}}" class="btn btn-danger"  title="Eliminar"><i class="fa fa-trash"></i> </a>
                         </td>
                     </tr>
 
@@ -130,7 +153,22 @@
                                          placeholder="Correo Elenctrónico"/>
                                 </div>
                             </div>
-
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="pwd_client" class="form-control"
+                                           placeholder="Contraseña"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Confirmar Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="confirm_pwd" class="form-control"
+                                           placeholder="Confirmar Contraseña"/>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"
                                        for="inputPassword3" >Departamento</label>
@@ -207,7 +245,7 @@
                             <span class="sr-only">Close</span>
                         </button>
                         <h4 class="modal-title" id="myModalLabel">
-                            Agregar Cliente
+                            Actualizar Datos
                         </h4>
                     </div>
 
@@ -302,6 +340,72 @@
         {{--FIN MODAL--}}
 
 
+
+        <div class="modal fade" id="updatePwd" tabindex="-1" role="dialog"
+             aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!-- Modal Header -->
+                    <div class="modal-header">
+                        <button type="button" class="close"
+                                data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                            <span class="sr-only">Close</span>
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Actualizar Contraseña
+                        </h4>
+                    </div>
+
+                    <!-- Modal Body -->
+                    <div class="modal-body">
+
+                        <form class="form-horizontal" action="{{route('update_client_pwd')}}" id="frm_client" method="post">
+                            {{@csrf_field() }}
+                            <input type="hidden" id="idClient_pwd" name="idClient">
+                            <div class="form-group">
+                                <label  class="col-sm-2 control-label"
+                                        for="inputEmail3">Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="pwd_client" class="form-control"
+                                           id="pwd_client_new" placeholder="Contraseña"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Nueva Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="new_pwd" class="form-control"
+                                           id="new_pwd_new" placeholder="Nueva Contraseña"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Confirme Contraseña</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  name="pwd_confirm" class="form-control"
+                                           id="pwd_confirm_new" placeholder="Confirme Contraseña"/>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default"
+                                        data-dismiss="modal">
+                                    Cerrar
+                                </button>
+                                <input type="submit" value="Actualizar" id="btn_client" class="btn btn-primary">
+                            </div>
+                        </form>
+
+                    </div>
+
+                    <!-- Modal Footer -->
+
+                </div>
+            </div>
+        </div>
+        {{--FIN MODAL--}}
+
 @endsection
 @section('after_scripts')
     <script>
@@ -342,6 +446,19 @@
                 distrito.value = ""
                 // btn_client.value = "Actualizar"
             });
+            const btn_pwd_update = document.querySelectorAll(".btn_pwd_update")
+            for(let i = 0; i < btn_pwd_update.length; i++) {
+                btn_pwd_update[i].addEventListener('click', function () {
+                    idClient_pwd.value = btn_pwd_update[i].id
+                })
+            }
 
+            $('#updatePwd').on('hidden.bs.modal', function () {
+                idClient_pwd.value = ""
+                pwd_client_new.value = ""
+                new_pwd_new.value = ""
+                pwd_confirm_new.value = ""
+
+            });
     </script>
 @endsection

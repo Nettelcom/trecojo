@@ -76,7 +76,7 @@
                                         for="inputPassword3" >Placa de Vehículo</label>
                                  <div class="col-sm-10">
                                      <input type="text"  name="placa" class="form-control"
-                                            id="placa" placeholder="Place de Vehículo"/>
+                                            id="inpt4" placeholder="Place de Vehículo"/>
                                  </div>
                              </div>
                              <div class="form-group">
@@ -234,7 +234,7 @@
                                    for="inputPassword3" >Modelo</label>
                             <div class="col-sm-10">
                                 <input type="text"  name="modelo" class="form-control"
-                                       id="modelo" placeholder="Distancia mínima"/>
+                                       id="modelo" placeholder="Modelo"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -242,7 +242,7 @@
                                    for="inputPassword3" >Color</label>
                             <div class="col-sm-10">
                                 <input type="text"  name="color" class="form-control"
-                                       id="color" placeholder="Precio Mínimo"/>
+                                       id="color" placeholder="Color"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -250,7 +250,7 @@
                                    for="inputPassword3" >Año</label>
                             <div class="col-sm-10">
                                 <input type="text"  name="anio" class="form-control"
-                                       id="anio" placeholder="Precio por Km"/>
+                                       id="anio" placeholder="Año"/>
                             </div>
                         </div>
 
@@ -320,7 +320,7 @@
                         color.value = data.color;
                         anio.value = data.anio;
                         seat.value = data.seat_capacity;
-                        placa.value  = data.placa
+                        placa.value  = data.placa;
                         let status = data.visibility_status
                         if(status == 1) {
                             visibility_status.checked = true

@@ -22,6 +22,7 @@
           <li><a href="{{ url(config('backpack.base.route_prefix').'/dashboard') }}"><i class="fa fa-dashboard"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
            <li><a href="{{ url(config('backpack.base.route_prefix').'/maps') }}"><i class="fa fa-map-marker"></i> <span>Mapa</span></a></li>
             <li><a href="{{ url(config('backpack.base.route_prefix').'/request') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes</span></a></li>
+            <li><a href="{{ url(config('backpack.base.route_prefix').'/request-company') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes de Empresa</span></a></li>
               <li><a href="{{ url(config('backpack.base.route_prefix').'/car-types') }}"><i class="fa fa-car"></i> <span>Autos</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/providers') }}"><i class="fa fa-user-plus"></i> <span>Conductores</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Empresas</span></a></li>
@@ -61,4 +62,5 @@
       </section>
       <!-- /.sidebar -->
     </aside>
+
 @endif

@@ -17,11 +17,11 @@
 
 @section('content')
                 <div class="row">
-        <div class="col-lg-3 col-xs-6">
+        <div  class="col-lg-3 col-xs-5 buttons_payments" id="0">
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>S/ 150</h3>
+              <h3>S/.{{$costs_amounts['all']}}</h3>
 
               <p>Pago Total</p>
             </div>
@@ -32,11 +32,11 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-6 buttons_payments" id="1">
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>S/ 53<sup style="font-size: 20px"></sup></h3>
+              <h3>S/.{{$costs_amounts['contado']}}<sup style="font-size: 20px"></sup></h3>
 
               <p>Pago al contado</p>
             </div>
@@ -47,11 +47,11 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-6 buttons_payments" id="2">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3>S/ 44</h3>
+              <h3>S/.{{$costs_amounts['tarjeta']}}</h3>
 
               <p>Pago mediante tarjeta</p>
             </div>
@@ -62,11 +62,11 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6">
+        <div class="col-lg-3 col-xs-6 buttons_payments" id="3">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3>US/ 0</h3>
+              <h3>S/.{{$costs_amounts['otros']}}</h3>
 
               <p>Otros tipos de pagos</p>
             </div>
@@ -82,21 +82,23 @@
         <div class="col-md-12">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <div class="box-title">Pagos</div>
+                    <div class="box-title">Clientes</div>
                 </div>
             </div>
         </div>
     </div>
     <div class="box">
-        <div class="box-header">
-              <div class="input-group input-group-sm" style="width: 150px;">
-                  <input type="text" name="table_search" class="form-control pull-right" placeholder="Search">
+        {{--<div class="box-header">--}}
+              {{--<div class="input-group input-group-sm" style="width: 150px;">--}}
+                  {{--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">--}}
 
-                  <div class="input-group-btn">
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                  </div>
-                </div>
-            </div>
+                  {{--<div class="input-group-btn">--}}
+                    {{--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>--}}
+
+                  {{--</div>--}}
+                {{--</div>--}}
+
+            {{--</div>--}}
             <!-- /.box-header -->
             <div class="box-body">
               <table id="example1" class="table table-bordered table-striped">
@@ -105,44 +107,169 @@
                   <th>#id</th>
                   <th>Usuario</th>
                   <th>Conductor</th>
-                  <th>Estado</th>
+                  {{--<th>Estado</th>--}}
                   <th>Monto</th>
-                  <th>Estado del pago</th>
+                  {{--<th>Estado del pago</th>--}}
                   <th>Medio de pago</th>
-                    <th>Sin promoción</th>
-                    <th>Opciones</th>
+                    <th>Origen</th>
+                    <th>Destino</th>
+                    <th>Fecha/Hora Solicitud</th>
+                    <th>Embarque</th>
+                    <th>Llegada</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Vicente Zevallos</td>
-                  <td>Victor </td>
-                  
-                  <td><span class="label label-success">completado</span></td>
-                  <td>6.0</td>
-                  <td><span class="label label-success">pagado</span></td>
-                  <td>cash</td>
-                  <td><span class="label label-danger">N/A</span></td>
-                   <td> <div class="input-group-btn">
-                  <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
-                    <span class="fa fa-caret-down"></span></button>
-                  <ul class="dropdown-menu">
-                    <li><a href="#">Historial</a></li>
-                    <li><a href="#">Editar</a></li>
-                    <li class="divider"></li>
-                    <li><a href="#">Eliminar</a></li>
-                  </ul>
-                </div>
-                </td>
-                </tr>
-               
+                <tbody id="body_client">
+                    @foreach($clientsL as $clientL)
+                        <tr>
+                            <td>{{$clientL->id}}</td>
+                            <td>
+                            @foreach($clients_request as $client_request)
+                                @if($client_request->id == $clientL->client_id)
+                                    {{$client_request->first_name}}  {{$client_request->last_name}}
+                                @endif
+
+                            @endforeach
+                            <td>
+                                @foreach($providers as $provider)
+                                    @if($provider->id == $clientL->provider_id)
+                                         {{$provider->first_name}}  {{$provider->last_name}}
+                                    @endif
+
+                                @endforeach
+                            </td>
+                               <td >S/.{{$clientL->cost_amount}}</td>
+                            <td>
+                                @foreach($payments as $payment)
+                                    @if($payment->id == $clientL->payment_type_id)
+                                        {{$payment->type_payment}}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>{{$clientL->start_address}}</td>
+                            <td>{{$clientL->end_address}}</td>
+                            <td>{{$clientL->date_request}}</td>
+                            <td>{{$clientL->date_arrive}}</td>
+                            <td>{{$clientL->date_end}}</td>
+                        </tr>
+                    @endforeach
                </tbody>
 
                 </tfoot>
               </table>
             </div>
+    </div>
             <!-- /.box-body -->
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-default">
+                    <div class="box-header with-border">
+                        <div class="box-title">Empresas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="box">
+            {{--<div class="box-header">--}}
+                {{--<div class="input-group input-group-sm" style="width: 150px;">--}}
+                    {{--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">--}}
+
+                    {{--<div class="input-group-btn">--}}
+                        {{--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>--}}
+
+                    {{--</div>--}}
+                {{--</div>--}}
+
+            {{--</div>--}}
+            <!-- /.box-header -->
+            <div class="box-body">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>#id</th>
+                        <th>Empresa</th>
+                        <th>Conductor</th>
+                        {{--<th>Estado</th>--}}
+                        <th>Monto</th>
+                        {{--<th>Estado del pago</th>--}}
+                        <th>Medio de pago</th>
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th>Fecha/Hora Solicitud</th>
+                        <th>Embarque</th>
+                        <th>Llegada</th>
+                    </tr>
+                    </thead>
+                    <tbody id="body_company">
+                    @foreach($companiesL as $companyL)
+                        <tr>
+                            <td>{{$companyL->id}}</td>
+                            <td>
+                            @foreach($compas as $compa)
+                                @if($compa->id == $companyL->company_id)
+                                    {{$compa->r_social}}
+                                @endif
+
+                            @endforeach
+                            <td>
+                                @foreach($providers as $provider)
+                                    @if($provider->id == $companyL->provider_id)
+                                        {{$provider->first_name}}  {{$provider->last_name}}
+                                    @endif
+
+                                @endforeach
+                            </td>
+                            <td >S/.{{$companyL->cost_amount}}</td>
+                            <td>
+                                @foreach($payments as $payment)
+                                    @if($payment->id == $companyL->payment_type_id)
+                                        {{$payment->type_payment}}
+                                    @endif
+                                @endforeach
+                            </td>
+                            <td>{{$companyL->start_address}}</td>
+                            <td>{{$companyL->end_address}}</td>
+                            <td>{{$companyL->date_request}}</td>
+                            <td>{{$companyL->date_arrive}}</td>
+                            <td>{{$companyL->date_end}}</td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+
+                    </tfoot>
+                </table>
+            </div>
            
           </div>
+@endsection
+@section('after_scripts')
+    <script>
+       const buttons_payments = document.querySelectorAll(".buttons_payments")
+        for(let i = 0; i < buttons_payments.length; i++) {
+            buttons_payments[i].addEventListener('click', function () {
+                let typePayment =  buttons_payments[i].id
+                $.ajax({
+                    url: 'get_payments_for_type',
+                    data: {type: typePayment},
+                    method: 'POST',
+                    dataType: 'json',
+                    success: function (data) {
+                        $("#body_client").html("")
+                        $("#body_client").html(data.client_html)
+                        $("#body_company").html("")
+                        $("#body_company").html(data.company_html)
+                    }
+                })
+            })
+
+        }
+
+
+
+
+    </script>
+
+
 @endsection
