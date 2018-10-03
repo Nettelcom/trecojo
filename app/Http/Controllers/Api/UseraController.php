@@ -22,6 +22,7 @@ class UseraController extends Controller
             'departamento' => 'required',
             'pwd_client' => 'required',
             'provincia' => 'required',
+            'address' => 'required',
             'distrito' => 'required',
         ];
         $messages = [
@@ -29,9 +30,10 @@ class UseraController extends Controller
             'last_name.required' => 'apellido requerido',
             'phone.required' => 'apellido requerido',
             'email.required' => 'apellido requerido',
-            'pwd_client.required' => 'contraseña requerido',
+            'pwd_client.required' => 'contraseña requerida',
             'departamento.required' => 'apellido requerido',
             'provincia.required' => 'apellido requerido',
+            'address.required' => 'apellido requerido',
             'distrito.required' => 'apellido requerido',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -47,6 +49,7 @@ class UseraController extends Controller
             $client->phone = $request->input('phone');
             $client->email = $request->input('email');
             $client->address = $request->input('address');
+            $client->pwd_client = $request->input('pwd_client');
             $client->provincia = $request->input('provincia');
             $client->distrito = $request->input('distrito');
             $client->departamento = $request->input('departamento');

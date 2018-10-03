@@ -71,7 +71,7 @@
                             <td>{{$req_company->id}}</td>
                             <td>
                                 @foreach($companies as $company)
-                                    @if($req_company->company_id == $company->id)
+                                    @if($req_gitcompany->company_id == $company->id)
                                         {{$company->r_social}}
                                     @endif
 
