@@ -21,6 +21,7 @@ class CarsController extends Controller
         $car->placa = $request->input('placa');
         $car->visibility_status = $visible;
         $car->save();
+        
         return back();
 
     }
@@ -47,6 +48,7 @@ class CarsController extends Controller
         $car->placa = $request->input('placa');
         $car->visibility_status = $visibility;
         $car->save();
+//        $sc = new Controller;
         return back();
     }
     public  function delete_cars($id) {

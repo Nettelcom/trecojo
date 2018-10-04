@@ -49,7 +49,7 @@ class UseraController extends Controller
             $client->phone = $request->input('phone');
             $client->email = $request->input('email');
             $client->address = $request->input('address');
-            $client->pwd_client = $request->input('pwd_client');
+            $client->pwd_client = md5($request->input('pwd_client'));
             $client->provincia = $request->input('provincia');
             $client->distrito = $request->input('distrito');
             $client->departamento = $request->input('departamento');
@@ -110,12 +110,16 @@ class UseraController extends Controller
                         'last_name' => 'required',
                         'phone' => 'required',
                         'email' => 'required',
+                        'pwd_company' => 'required'
+
+
                     ];
                     $messages = [
                         'first_name.required' => 'nombre requerido',
                         'last_name.required' => 'apellido requerido',
                         'phone.required' => 'apellido requerido',
-                        'email.required' => 'apellido requerido'
+                        'email.required' => 'apellido requerido',
+                        'pwd_company.required' => 'La contraseña es requerida'
                     ];
                     $validator = Validator::make($request->all(), $rules, $messages);
                     if($validator->fails()) {
@@ -145,6 +149,7 @@ class UseraController extends Controller
                         $comp->phone = $request->input('phone');
                         $comp->email = $request->input('email');
                         $comp->status = 1;
+                        $comp->pwd_company =md5($request->input('pwd_company'));
                         $comp->save();
                         $response = [
                             'status' => 201,
@@ -159,14 +164,14 @@ class UseraController extends Controller
     }
     public function addRequestClient(Rq $request) {
         $rules = [
-            'client_id' => 'required',
+            'company_id' => 'required',
             'payment_type_id' => 'required',
             'start_address' => 'required',
             'end_address' => 'required',
             'date_arrive' => 'required',
         ];
         $messages = [
-            'client_id.required' => 'Id de Cliente Requerido',
+            'company_id.required' => 'Id de Cliente Requerido',
             'payment_type_id.required' => 'Tipo de Pago Requerido',
             'start_address.required' => 'Origen Requerido',
             'end_address.required' => 'Destino Requerido',
@@ -180,12 +185,13 @@ class UseraController extends Controller
             ];
 
         }else {
+            $new_date_arrive =date('Y-m-d\TH:i', strtotime($request->input('date_arrive')));
             $req= new Request;
-            $req->client_id = $request->input('client_id');
+            $req->client_id = $request->input('company_id');
             $req->payment_type_id = $request->input('payment_type_id');
             $req->start_address = $request->input('start_address');
             $req->end_address = $request->input('end_address');
-            $req->date_arrive = $request->input('date_arrive');
+            $req->date_arrive = $new_date_arrive;
             $req->save();
             $response = [
                 'status' => 201,
@@ -195,7 +201,6 @@ class UseraController extends Controller
 
         return Response::json($response);
     }
-
     public  function  addRequestCompany(Rq $request) {
         $rules = [
             'client_id' => 'required',
@@ -219,12 +224,13 @@ class UseraController extends Controller
             ];
 
         }else {
+            $new_date_arrive =date('Y-m-d\TH:i', strtotime($request->input('date_arrive')));
             $req= new RequestCompany;
             $req->company_id = $request->input('client_id');
             $req->payment_type_id = $request->input('payment_type_id');
             $req->start_address = $request->input('start_address');
             $req->end_address = $request->input('end_address');
-            $req->date_arrive = $request->input('date_arrive');
+            $req->date_arrive = $new_date_arrive;
             $req->save();
             $response = [
                 'status' => 201,

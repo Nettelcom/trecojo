@@ -89,7 +89,7 @@
                             <?php
                             if ($company->status == 1):
                             ?>
-                            <a href='{{route("change_status_company",[$company->id])}}' class='btn btn-success'>Aprovado</a>
+                            <a href='{{route("change_status_company",[$company->id])}}' class='btn btn-success'>Aprobado</a>
                             <?php
                             elseif ($company->approval_status == 0) :
                             ?>
@@ -236,6 +236,22 @@
                                             <div class="col-sm-10">
                                                 <input type="text"  required name="email" class="form-control"
                                                        id="email" placeholder="Correo Electrónico"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"
+                                                   for="inputPassword3" >Contraseña</label>
+                                            <div class="col-sm-10">
+                                                <input type="password"  required name="pwd_company" class="form-control"
+                                                       id="email" placeholder="Contraseña"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label"
+                                                   for="inputPassword3" >Confirmar Contraseña</label>
+                                            <div class="col-sm-10">
+                                                <input type="password"  required name="pwd_company_confirm" class="form-control"
+                                                       id="email" placeholder="Confirmar Contraseña"/>
                                             </div>
                                         </div>
 

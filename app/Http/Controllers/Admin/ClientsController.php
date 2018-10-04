@@ -69,6 +69,7 @@ class ClientsController extends Controller
             $client = Clients::find($request->input('idClient'));
             return response()->json($client);
         }
+
     }
     public  function update_client(Request $request) {
         $client = Clients::find($request->input("idClient"));
@@ -80,11 +81,13 @@ class ClientsController extends Controller
             'pwd_client' => 'required',
             'new_pwd' => 'required|same:pwd_confirm'
         ];
+
         $messages = [
             'pwd_client.required' => 'La contraseña es requerida',
             'new_pwd.required' => 'La nueva contraseña es requerida',
             'new_pwd.same' => 'Las contraseñas no coinciden'
         ];
+
         $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()) {
             return back()->withErrors($validator)->withInput();

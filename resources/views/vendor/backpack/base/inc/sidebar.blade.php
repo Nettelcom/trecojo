@@ -27,7 +27,7 @@
              <li><a href="{{ url(config('backpack.base.route_prefix').'/providers') }}"><i class="fa fa-user-plus"></i> <span>Conductores</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Empresas</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/clients') }}"><i class="fa fa-user-plus"></i> <span>Clientes</span></a></li>
-              <li><a href="{{ url(config('backpack.base.route_prefix').'/owners') }}"><i class="fa fa-users"></i> <span>Usuarios</span></a></li>
+              {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/owners') }}"><i class="fa fa-users"></i> <span>Usuarios</span></a></li>--}}
              
                 <li><a href="{{ url(config('backpack.base.route_prefix').'/promo-codes') }}"><i class="fa fa-code"></i> <span>Promociones</span></a></li>
                  <li><a href="{{ url(config('backpack.base.route_prefix').'/payments') }}"><i class="fa fa-money"></i> <span>Pagos</span></a></li>

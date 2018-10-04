@@ -13,7 +13,7 @@ class CompanyController extends Controller
     public  function add_company(Request $request) {
 //        dd($request->all());
         $rules = [
-            'ruc_number' => 'required|min:11',
+            'ruc_number' => 'required',
             'r_social' => 'required',
             'departamento' => 'required',
             'provincia' => 'required',
@@ -22,6 +22,7 @@ class CompanyController extends Controller
             'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required',
+            'pwd_company' => 'required|same:pwd_company_confirm'
         ];
         $messages = [
 
@@ -29,7 +30,9 @@ class CompanyController extends Controller
             'last_name.required' => "El apellido es requerido",
             'email.required' => "El correo es requerido",
             'r_social.required' => 'El RUC es requerido',
-            'phone.required' => 'El número de teléfono es requerido'
+            'phone.required' => 'El número de teléfono es requerido',
+            'pwd_company.required' => 'Contraseña Requerida',
+            'pwd_company.same' => 'Las contraseñas no coinciden'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if( $validator -> fails()) {
@@ -52,6 +55,7 @@ class CompanyController extends Controller
             $company->phone = $request->input('phone');
             $company->email = $request->input('email');
             $company->status = $approval_status;
+            $company->pwd_company= md5($request->input('pwd_company'));
             $company->save();
 
             return back();
