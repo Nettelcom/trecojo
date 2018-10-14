@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\CarCompanyController;
+use App\Clients;
 use App\Company;
+use App\CompanyUsers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
@@ -22,7 +25,7 @@ class CompanyController extends Controller
             'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required',
-            'pwd_company' => 'required|same:pwd_company_confirm'
+//            'pwd_company' => 'required|same:pwd_company_confirm'
         ];
         $messages = [
 
@@ -32,7 +35,7 @@ class CompanyController extends Controller
             'r_social.required' => 'El RUC es requerido',
             'phone.required' => 'El número de teléfono es requerido',
             'pwd_company.required' => 'Contraseña Requerida',
-            'pwd_company.same' => 'Las contraseñas no coinciden'
+//            'pwd_company.same' => 'Las contraseñas no coinciden'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if( $validator -> fails()) {
@@ -55,7 +58,8 @@ class CompanyController extends Controller
             $company->phone = $request->input('phone');
             $company->email = $request->input('email');
             $company->status = $approval_status;
-            $company->pwd_company= md5($request->input('pwd_company'));
+//            $company->pwd_company= md5($request->input('pwd_company'));
+            $company->pwd_company = md5($request->input('phone')) ;
             $company->save();
 
             return back();
@@ -180,5 +184,18 @@ class CompanyController extends Controller
             return back();
         }
     }
+    public function get_users_company(Request $request) {
+//        $users_company = CompanyUsers::where('id_company', $request->input('id_company'))->get();
+        $idC = $request->input('id_company');
+         $users_company = DB::select("select clients.id, clients.first_name, clients.last_name from clients INNER JOIN company_users on clients.id = company_users.id_user
+                 where company_users.id_company = $idC ");
+         $html = "<option value='empty'>Usuarios De Empresa</option>";
+         foreach ($users_company as $user ) {
+             $html .= "<option value='{$user->id}'>";
+             $html .= "{$user->first_name}  {$user->last_name}";
+             $html .= "</option>";
+         }
 
+        return response()->json(["opts" => $html]);
+    }
 }

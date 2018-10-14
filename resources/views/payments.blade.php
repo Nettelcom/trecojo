@@ -16,6 +16,35 @@
 
 
 @section('content')
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default" >
+                <div class="box-header with-border" style="display: flex; justify-content:space-between">
+                    <div class="box-title">Filtros</div>
+                    <div class="box-default">
+                        <form action="filter_payments" method="POST">
+                            {{@csrf_field()}}
+                            Fecha 1: <input type="date" name="date_1">
+                            Fecha 2: <input type="date" name="date_2">
+                            Tipo de Pago: <select name="type_payment" id="" >
+                                <option value="">Seleccionar</option>
+                                @foreach($payments as $payment)
+                                    <option value="{{$payment->id}}">{{$payment->type_payment}}</option>
+                                    @endforeach
+                            </select>
+                            <input type="submit" value="Buscar" class="btn btn-primary">
+
+
+                        </form>
+                    </div>
+                    
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
                 <div class="row">
         <div  class="col-lg-3 col-xs-5 buttons_payments" id="0">
           <!-- small box -->
@@ -38,7 +67,7 @@
             <div class="inner">
               <h3>S/.{{$costs_amounts['contado']}}<sup style="font-size: 20px"></sup></h3>
 
-              <p>Pago al contado</p>
+              <p>Contado</p>
             </div>
             <div class="icon">
               <i class="ion ion-stats-bars"></i>
@@ -53,7 +82,7 @@
             <div class="inner">
               <h3>S/.{{$costs_amounts['tarjeta']}}</h3>
 
-              <p>Pago mediante tarjeta</p>
+              <p>Crédito</p>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -82,7 +111,7 @@
         <div class="col-md-12">
             <div class="box box-default">
                 <div class="box-header with-border">
-                    <div class="box-title">Clientes</div>
+                    <div class="box-title">Clientes Persona</div>
                 </div>
             </div>
         </div>
@@ -105,16 +134,18 @@
                 <thead>
                 <tr>
                   <th>#id</th>
-                  <th>Usuario</th>
+                    <th>Embarque</th>
+                    <th>Usuario</th>
                   <th>Conductor</th>
                   {{--<th>Estado</th>--}}
-                  <th>Monto</th>
+                  <th>Monto Totall</th>
+                  <th>Pago Conductor</th>
+                  <th>Margen</th>
                   {{--<th>Estado del pago</th>--}}
                   <th>Medio de pago</th>
                     <th>Origen</th>
                     <th>Destino</th>
-                    <th>Fecha/Hora Solicitud</th>
-                    <th>Embarque</th>
+                    {{--<th>Fecha/Hora Solicitud</th>--}}
                     <th>Llegada</th>
                 </tr>
                 </thead>
@@ -122,6 +153,8 @@
                     @foreach($clientsL as $clientL)
                         <tr>
                             <td>{{$clientL->id}}</td>
+                            <td>{{$clientL->date_arrive}}</td>
+
                             <td>
                             @foreach($clients_request as $client_request)
                                 @if($client_request->id == $clientL->client_id)
@@ -138,6 +171,8 @@
                                 @endforeach
                             </td>
                                <td >S/.{{$clientL->cost_amount}}</td>
+                               <td >S/.{{$clientL->cost_provider}}</td>
+                               <td >S/.{{$clientL->margin}}</td>
                             <td>
                                 @foreach($payments as $payment)
                                     @if($payment->id == $clientL->payment_type_id)
@@ -147,8 +182,7 @@
                             </td>
                             <td>{{$clientL->start_address}}</td>
                             <td>{{$clientL->end_address}}</td>
-                            <td>{{$clientL->date_request}}</td>
-                            <td>{{$clientL->date_arrive}}</td>
+                            {{--<td>{{$clientL->date_request}}</td>--}}
                             <td>{{$clientL->date_end}}</td>
                         </tr>
                     @endforeach
@@ -164,7 +198,7 @@
             <div class="col-md-12">
                 <div class="box box-default">
                     <div class="box-header with-border">
-                        <div class="box-title">Empresas</div>
+                        <div class="box-title">Cliente Empresas</div>
                     </div>
                 </div>
             </div>
@@ -189,16 +223,20 @@
                     <thead>
                     <tr>
                         <th>#id</th>
+                        <th>Embarque</th>
+
                         <th>Empresa</th>
                         <th>Conductor</th>
+                        <th>Usuario</th>
                         {{--<th>Estado</th>--}}
-                        <th>Monto</th>
+                        <th>Monto Total</th>
+                        <th>Pago Conductor</th>
+                        <th>Margen</th>
                         {{--<th>Estado del pago</th>--}}
                         <th>Medio de pago</th>
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th>Fecha/Hora Solicitud</th>
-                        <th>Embarque</th>
+                        {{--<th>Fecha/Hora Solicitud</th>--}}
                         <th>Llegada</th>
                     </tr>
                     </thead>
@@ -206,13 +244,16 @@
                     @foreach($companiesL as $companyL)
                         <tr>
                             <td>{{$companyL->id}}</td>
+                            <td>{{$companyL->date_arrive}}</td>
+
                             <td>
                             @foreach($compas as $compa)
                                 @if($compa->id == $companyL->company_id)
                                     {{$compa->r_social}}
                                 @endif
 
-                            @endforeach
+                                @endforeach</td>
+
                             <td>
                                 @foreach($providers as $provider)
                                     @if($provider->id == $companyL->provider_id)
@@ -221,7 +262,16 @@
 
                                 @endforeach
                             </td>
+                            <td>
+                                @foreach($clients_request as $client)
+                                    @if($client->id == $companyL->client_id)
+                                        {{$client->first_name}}  {{$client->last_name}}
+                                    @endif
+                                @endforeach
+                            </td>
                             <td >S/.{{$companyL->cost_amount}}</td>
+                            <td >S/.{{$companyL->cost_provider}}</td>
+                            <td >S/.{{$companyL->margin}}</td>
                             <td>
                                 @foreach($payments as $payment)
                                     @if($payment->id == $companyL->payment_type_id)
@@ -231,8 +281,7 @@
                             </td>
                             <td>{{$companyL->start_address}}</td>
                             <td>{{$companyL->end_address}}</td>
-                            <td>{{$companyL->date_request}}</td>
-                            <td>{{$companyL->date_arrive}}</td>
+                            {{--<td>{{$companyL->date_request}}</td>--}}
                             <td>{{$companyL->date_end}}</td>
                         </tr>
                     @endforeach

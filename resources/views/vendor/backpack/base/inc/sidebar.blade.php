@@ -1,3 +1,11 @@
+<?php
+    $rqController = new \App\Http\Controllers\Admin\RequestController;
+    $notify =  $rqController->rememberRequest();
+    $countNotify = (count($notify["company"] )+ count($notify["client"]) - 2);
+    $json_data = json_encode($notify);
+
+//?>
+
 @if (Auth::check())
     <!-- Left side column. contains the sidebar -->
     <aside class="main-sidebar">
@@ -20,17 +28,33 @@
           <!-- ==== Recommended place for admin menu items ==== -->
           <!-- ================================================ -->
           <li><a href="{{ url(config('backpack.base.route_prefix').'/dashboard') }}"><i class="fa fa-dashboard"></i> <span>{{ trans('backpack::base.dashboard') }}</span></a></li>
+          <li ><a   id="notification_id" href="{{ url(config('backpack.base.route_prefix').'/notifications') }}">
+                      <i class="fa fa-bell"  style=" position: relative">
+           <span
+                        style="position: absolute; font-size: 1em; background: tomato;
+                          width: 15px; height: 15px; border-radius: 50%;display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; ">
+                        {{$countNotify}}
+           </span>
+
+                          </i>
+                      <span style="padding-left: 10px;">
+                            Notificaciones
+
+                      </span>
+                    </a>
+          </li>
            <li><a href="{{ url(config('backpack.base.route_prefix').'/maps') }}"><i class="fa fa-map-marker"></i> <span>Mapa</span></a></li>
-            <li><a href="{{ url(config('backpack.base.route_prefix').'/request') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes</span></a></li>
-            <li><a href="{{ url(config('backpack.base.route_prefix').'/request-company') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes de Empresa</span></a></li>
+            <li><a href="{{ url(config('backpack.base.route_prefix').'/request') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes Cliente Persona</span></a></li>
+            <li><a href="{{ url(config('backpack.base.route_prefix').'/request-company') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes Cliente Empresa</span></a></li>
               <li><a href="{{ url(config('backpack.base.route_prefix').'/car-types') }}"><i class="fa fa-car"></i> <span>Autos</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/providers') }}"><i class="fa fa-user-plus"></i> <span>Conductores</span></a></li>
-             <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Empresas</span></a></li>
-             <li><a href="{{ url(config('backpack.base.route_prefix').'/clients') }}"><i class="fa fa-user-plus"></i> <span>Clientes</span></a></li>
+             <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Cliente Empresa</span></a></li>
+             <li><a href="{{ url(config('backpack.base.route_prefix').'/clients') }}"><i class="fa fa-user-plus"></i> <span>Cliente Persona</span></a></li>
               {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/owners') }}"><i class="fa fa-users"></i> <span>Usuarios</span></a></li>--}}
              
                 <li><a href="{{ url(config('backpack.base.route_prefix').'/promo-codes') }}"><i class="fa fa-code"></i> <span>Promociones</span></a></li>
                  <li><a href="{{ url(config('backpack.base.route_prefix').'/payments') }}"><i class="fa fa-money"></i> <span>Pagos</span></a></li>
+                 <li><a href="{{ url(config('backpack.base.route_prefix').'/show_margin') }}"><i class="fa fa-money"></i> <span>Margen de Ganancia</span></a></li>
                  <li><a href="{{ url(config('backpack.base.route_prefix').'/general-settings') }}"><i class="fa fa-check-circle-o"></i> <span>Configuraciones</span></a></li>
 
           <!-- Users, Roles Permissions -->
@@ -64,3 +88,11 @@
     </aside>
 
 @endif
+@section("before_scripts")
+    <script>
+
+
+
+    </script>
+
+   @endsection

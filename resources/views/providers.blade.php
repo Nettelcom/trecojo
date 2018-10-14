@@ -1,4 +1,4 @@
-@extends('backpack::layout')
+    @extends('backpack::layout')
 
 @section('header')
     <section class="content-header">
@@ -125,12 +125,20 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Imagen</label>
+                                                   for="inputPassword3" >Número de Cuenta</label>
                                             <div class="col-sm-10">
-                                                <input type="file"  name="picture" class="form-control"
-                                                       id="inputPassword3" placeholder="Asientos"/>
+                                                <input type="number"   name="number_acount" class="form-control"
+                                                     placeholder="Número de Cuenta"/>
                                             </div>
                                         </div>
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="col-sm-2 control-label"--}}
+                                                   {{--for="inputPassword3" >Imagen</label>--}}
+                                            {{--<div class="col-sm-10">--}}
+                                                {{--<input type="file"  name="picture" class="form-control"--}}
+                                                       {{--id="inputPassword3" placeholder="Asientos"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
                                         <label class="col-sm-2 control-label"
                                                for="inputPassword3" >Estado</label>
@@ -157,8 +165,13 @@
                                         <label  class="col-sm-2 control-label"
                                                 for="inputEmail3">Tipo</label>
                                         <div class="col-sm-10">
-                                            <input type="text"  name="type" class="form-control"
-                                                   id="inputEmail3" placeholder="Tipo"/>
+                                            <select name="type" id="" class="form-control">
+                                                <option value="">Seleccione un Vehículo</option>
+                                                @foreach($type_car as $t_car)
+
+                                                    <option value="{{$t_car->id}}">{{$t_car->type_c}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -227,9 +240,9 @@
                   <th>#id</th>
                   <th>Nombre</th>
                   <th>Email</th>
-                  <th>Marca</th>
+                  <th>Vehículo</th>
                   <th>Teléfono</th>
-                  <th>Foto</th>
+                  <th>Número de Cuenta</th>
                   <th>Estado</th>
                    <th>Opciones</th>
                 </tr>
@@ -241,14 +254,22 @@
                    <td>{{$provider->id}}</td>
                   <td>{{$provider->first_name }} {{$provider->last_name }}</td>
                   <td>{{$provider->email }}</td>
-                   <td>{{$provider->cartype[0]->type}}</td>
+                   <td>
+                       @foreach($type_car as $t_car)
+                           @if($provider->cartype[0]->type == $t_car->id)
+                               {{$t_car->type_c}}
+                           @endif
+
+                       @endforeach
+                       </td>
                   <td>{{$provider->contacts }}</td>
-                  <td><a class="imgProvider" id="{{$provider->id}}" data-toggle="modal" data-target="#popUpImg">Ver Imagen</a></td>
+{{--                  <td><a class="imgProvider" id="{{$provider->id}}" data-toggle="modal" data-target="#popUpImg">Ver Imagen</a></td>--}}
+                    <td>{{$provider->number_acount}}</td>
                   <td>
                         <?php
                         if ($provider->approval_status == 1):
                             ?>
-                             <a href='{{route("chage_status_provider",[$provider->id])}}' class='btn btn-success'>Aprovado</a>
+                             <a href='{{route("chage_status_provider",[$provider->id])}}' class='btn btn-success'>Aprobado</a>
                          <?php
                         elseif ($provider->approval_status == 0) :
                             ?>
@@ -260,7 +281,7 @@
                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
                     <span class="fa fa-caret-down"></span></button>
                   <ul class="dropdown-menu">
-                    <li><a data-target="#addCars" id="{{$provider->id}}" class="addCarsBtn" data-toggle="modal">Agregar Vehículo</a></li>
+                    {{--<li><a data-target="#addCars" id="{{$provider->id}}" class="addCarsBtn" data-toggle="modal">Agregar Vehículo</a></li>--}}
                     <li><a  class="btn_edit" data-toggle="modal" id="{{$provider->id}}" data-target="#showProvider" href="">Editar</a></li>
                     <li class="divider"></li>
                     <li><a href="{{route('delete_provider', [$provider->id])}}">Eliminar</a></li>
@@ -279,7 +300,7 @@
              {!! $providers->render() !!}
             </div>
           </div>
-
+{{--{{dd($type_car)}}--}}
 
 
     <!-- Modal -->
@@ -290,7 +311,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
 
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Agregar Conductor</h4>
+                    <h4 class="modal-title" id="myModalLabel">Editar Conductor</h4>
 
                 </div>
                 <div class="modal-body">
@@ -350,12 +371,20 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Imagen</label>
+                                                   for="inputPassword3" >Número de Cuenta</label>
                                             <div class="col-sm-10">
-                                                <input type="file"  name="picture" class="form-control"
-                                                       id="picture" placeholder="Asientos"/>
+                                                <input type="number"   name="number_acount" class="form-control"
+                                                       id="acount" placeholder="Número de Cuenta"/>
                                             </div>
                                         </div>
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="col-sm-2 control-label"--}}
+                                                   {{--for="inputPassword3" >Imagen</label>--}}
+                                            {{--<div class="col-sm-10">--}}
+                                                {{--<input type="file"  name="picture" class="form-control"--}}
+                                                       {{--id="picture" placeholder="Asientos"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
                                         <label class="col-sm-2 control-label"
                                                for="inputPassword3" >Estado</label>
@@ -382,8 +411,15 @@
                                             <label  class="col-sm-2 control-label"
                                                     for="inputEmail3">Tipo</label>
                                             <div class="col-sm-10">
-                                                <input type="text"  name="type" class="form-control"
-                                                       id="type" placeholder="Tipo"/>
+                                                {{--<input type="text"  name="type" class="form-control"--}}
+                                                       {{--id="type" placeholder="Tipo"/>--}}
+                                                <select name="type" id="" class="form-control">
+                                                    <option value="">Seleccione un Vehículo</option>
+                                                    @foreach($type_car as $t_car)
+
+                                                        <option class="type_car" value="{{$t_car->id}}">{{$t_car->type_c}}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -391,7 +427,7 @@
                                                    for="inputPassword3" >Placa de Vehículo</label>
                                             <div class="col-sm-10">
                                                 <input type="text"  name="placa" class="form-control"
-                                                       id="inputPassword3" placeholder="Place de Vehículo"/>
+                                                       id="placa" placeholder="Place de Vehículo"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -450,109 +486,109 @@
 
 
 
-    <div class="modal fade" id="popUpImg" role="dialog">
-        <div class="modal-dialog">
+    {{--<div class="modal fade" id="popUpImg" role="dialog">--}}
+        {{--<div class="modal-dialog">--}}
 
-            <!-- Modal content-->
-            <div class="modal-content">
-                <div class="modal-body center" style="display: flex; justify-content: center; align-items: center">
-                    <img id="img_popup"  class="img-responsive" style="display: block; width: 500px; height: 300px;">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+            {{--<!-- Modal content-->--}}
+            {{--<div class="modal-content">--}}
+                {{--<div class="modal-body center" style="display: flex; justify-content: center; align-items: center">--}}
+                    {{--<img id="img_popup"  class="img-responsive" style="display: block; width: 500px; height: 300px;">--}}
+                {{--</div>--}}
+                {{--<div class="modal-footer">--}}
+                    {{--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>--}}
+                {{--</div>--}}
+            {{--</div>--}}
 
-        </div>
-    </div>
+        {{--</div>--}}
+    {{--</div>--}}
 
-    <div class="modal fade" id="addCars" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <button type="button" class="close"
-                            data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        Agregar Autos
-                    </h4>
-                </div>
+    {{--<div class="modal fade" id="addCars" tabindex="-1" role="dialog"--}}
+         {{--aria-labelledby="myModalLabel" aria-hidden="true">--}}
+        {{--<div class="modal-dialog">--}}
+            {{--<div class="modal-content">--}}
+                {{--<!-- Modal Header -->--}}
+                {{--<div class="modal-header">--}}
+                    {{--<button type="button" class="close"--}}
+                            {{--data-dismiss="modal">--}}
+                        {{--<span aria-hidden="true">&times;</span>--}}
+                        {{--<span class="sr-only">Close</span>--}}
+                    {{--</button>--}}
+                    {{--<h4 class="modal-title" id="myModalLabel">--}}
+                        {{--Agregar Autos--}}
+                    {{--</h4>--}}
+                {{--</div>--}}
 
-                <!-- Modal Body -->
-                <div class="modal-body">
+                {{--<!-- Modal Body -->--}}
+                {{--<div class="modal-body">--}}
 
-                    <form class="form-horizontal" action="{{route('add_car_provider')}}" method="post">
-                        <input type="hidden" id="idProviderEdit" name="idProviderEdit">
-                        {{@csrf_field() }}
-                        <div class="form-group">
-                            <label  class="col-sm-2 control-label"
-                                    for="inputEmail3">Tipo</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="type" class="form-control"
-                                       id="inputEmail3" placeholder="Tipo"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Modelo</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="modelo" class="form-control"
-                                       id="placa" placeholder="Place de Vehículo"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Númeo de Placa</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="placa" class="form-control"
-                                       id="inputPassword3" placeholder="Número de Placa"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Color</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="color" class="form-control"
-                                       id="inputPassword3" placeholder="Color"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Año</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="anio" class="form-control"
-                                       id="inputPassword3" placeholder="Año"/>
-                            </div>
-                        </div>
+                    {{--<form class="form-horizontal" action="{{route('add_car_provider')}}" method="post">--}}
+                        {{--<input type="hidden" id="idProviderEdit" name="idProviderEdit">--}}
+                        {{--{{@csrf_field() }}--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label  class="col-sm-2 control-label"--}}
+                                    {{--for="inputEmail3">Tipo</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="type" class="form-control"--}}
+                                       {{--id="inputEmail3" placeholder="Tipo"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Modelo</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="modelo" class="form-control"--}}
+                                       {{--id="placa" placeholder="Place de Vehículo"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Número de Placassss</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="placa" class="form-control"--}}
+                                       {{--id="inputPassword3" placeholder="Número de Placa"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Color</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="color" class="form-control"--}}
+                                       {{--id="inputPassword3" placeholder="Color"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Año</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="anio" class="form-control"--}}
+                                       {{--id="inputPassword3" placeholder="Año"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
 
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label"
-                                   for="inputPassword3" >Asientos</label>
-                            <div class="col-sm-10">
-                                <input type="text"  name="seat_capacity" class="form-control"
-                                       id="inputPassword3" placeholder="Asientos"/>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">
-                                Cerrar
-                            </button>
-                            <input type="submit" value="Registrar" class="btn btn-primary">
-                        </div>
-                    </form>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Asientos</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="seat_capacity" class="form-control"--}}
+                                       {{--id="inputPassword3" placeholder="Asientos"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="modal-footer">--}}
+                            {{--<button type="button" class="btn btn-default"--}}
+                                    {{--data-dismiss="modal">--}}
+                                {{--Cerrar--}}
+                            {{--</button>--}}
+                            {{--<input type="submit" value="Registrar" class="btn btn-primary">--}}
+                        {{--</div>--}}
+                    {{--</form>--}}
 
-                </div>
+                {{--</div>--}}
 
-                <!-- Modal Footer -->
+                {{--<!-- Modal Footer -->--}}
 
-            </div>
-        </div>
-    </div>
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div>--}}
     {{--FIN MODAL--}}
 
 
@@ -596,16 +632,23 @@
                     dataType: "JSON",
                     method: "POST",
                     success: function (data) {
-                        console.log(data)
+                        // console.log(data)
                         idProvider.value = data[0].id
                         first_name.value = data[0].first_name
                         last_name.value = data[0].last_name
                         contacts.value = data[0].contacts
                         email.value = data[0].email
+                        acount.value = data[0].number_acount
                         // picture.value = data[0].picture
 
-
-                        type.value = data[1][0].type
+                        let type_car = document.querySelectorAll(".type_car")
+                        // console.log(type_car[2].value)
+                        for(let i = 0; i < type_car.length; i++) {
+                            if(type_car[i].value == data[1][0].type ) {
+                                type_car[i].selected = true
+                            }
+                        }
+                        // type.value = data[1][0].type
                         // base_distance.value = data[1][0].base_distance
                         placa.value = data[1][0].placa
                         modelo.value = data[1][0].modelo
@@ -623,40 +666,41 @@
                 idProviderEdit.value = addCarsBtn[i].id
             })
         }
-        ruc_number.addEventListener('blur', function () {
-
-             $.ajax({
-                 url: 'consult_ruc',
-                data: { ruc_value : ruc_number.value },
-                 dataType: 'JSON',
-                 method: 'GET',
-                 headers: {
-                     'Content-Type': 'application/json'
-                 },
-                 success: function (data) {
-
-                   if( data.success === false) {
-                       response_ruc.textContent =  data.error
-                       r_social.value = ""
-                       departamento.value = ""
-                       provincia.value = ""
-                       distrito.value = ""
-                       direccion.value = ""
-                       estado.value = ""
-                   }
-                   if(data.success === true) {
-                        r_social.value = data.nombre_o_razon_social
-                       departamento.value = data.departamento
-                       provincia.value = data.provincia
-                       distrito.value = data.distrito
-                       direccion.value = data.direccion_completa
-                       estado.value = data.estado_del_contribuyente
-                       response_ruc.textContent =  ""
-                   }
-                 }
-
-             })
-        })
+        // ruc_number.addEventListener('blur', function () {
+        //
+        //      $.ajax({
+        //          url: 'consult_ruc',
+        //         data: { ruc_value : ruc_number.value },
+        //          dataType: 'JSON',
+        //          method: 'GET',
+        //          headers: {
+        //              'Content-Type': 'application/json'
+        //          },
+        //          success: function (data) {
+        //
+        //            if( data.success === false) {
+        //                response_ruc.textContent =  data.error
+        //                r_social.value = ""
+        //                departamento.value = ""
+        //                provincia.value = ""
+        //                distrito.value = ""
+        //                direccion.value = ""
+        //                estado.value = ""
+        //                acount.value = ""
+        //            }
+        //            if(data.success === true) {
+        //                 r_social.value = data.nombre_o_razon_social
+        //                departamento.value = data.departamento
+        //                provincia.value = data.provincia
+        //                distrito.value = data.distrito
+        //                direccion.value = data.direccion_completa
+        //                estado.value = data.estado_del_contribuyente
+        //                response_ruc.textContent =  ""
+        //            }
+        //          }
+        //
+        //      })
+        // })
     </script>
 
 @endsection

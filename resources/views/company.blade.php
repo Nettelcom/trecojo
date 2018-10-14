@@ -67,6 +67,7 @@
                     <th>#id</th>
                     <th>Nombre</th>
                     <th>RUC</th>
+                    <th>Razón Social</th>
                     <th>Email</th>
                     <th>Teléfono</th>
                     <th>Direccion</th>
@@ -81,6 +82,7 @@
                         <td>{{$company->id}}</td>
                         <td>{{$company->first_name }} {{$company->last_name }}</td>
                         <td>{{$company->ruc }}</td>
+                        <td><span style="font-size: .9em;">{{$company->r_social }}</span></td>
                         <td>{{$company->email }}</td>
                         <td>{{$company->phone}}</td>
                         <td>{{$company->address }}</td>
@@ -101,7 +103,7 @@
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
                                     <span class="fa fa-caret-down"></span></button>
                                 <ul class="dropdown-menu">
-                                    {{--<li><a data-target="#addCars" id="{{$company->id}}" class="addCarsBtn" data-toggle="modal">Agregar Vehículo</a></li>--}}
+                                    <li><a data-target="#addCompanyUser" id="{{$company->id}}" class="addUSerc" data-toggle="modal">Agregar Usuario</a></li>
                                     <li><a  class="btn_edit btnEditCompany"  data-toggle="modal" id="{{$company->id}}" data-target="#updateCompany" href="">Editar</a></li>
                                     <li class="divider"></li>
                                     <li><a href="{{route('delete_company', [$company->id])}}">Eliminar</a></li>
@@ -238,22 +240,22 @@
                                                        id="email" placeholder="Correo Electrónico"/>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Contraseña</label>
-                                            <div class="col-sm-10">
-                                                <input type="password"  required name="pwd_company" class="form-control"
-                                                       id="email" placeholder="Contraseña"/>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-sm-2 control-label"
-                                                   for="inputPassword3" >Confirmar Contraseña</label>
-                                            <div class="col-sm-10">
-                                                <input type="password"  required name="pwd_company_confirm" class="form-control"
-                                                       id="email" placeholder="Confirmar Contraseña"/>
-                                            </div>
-                                        </div>
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="col-sm-2 control-label"--}}
+                                                   {{--for="inputPassword3" >Contraseña</label>--}}
+                                            {{--<div class="col-sm-10">--}}
+                                                {{--<input type="password"  required name="pwd_company" class="form-control"--}}
+                                                       {{--id="email" placeholder="Contraseña"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                        {{--<div class="form-group">--}}
+                                            {{--<label class="col-sm-2 control-label"--}}
+                                                   {{--for="inputPassword3" >Confirmar Contraseña</label>--}}
+                                            {{--<div class="col-sm-10">--}}
+                                                {{--<input type="password"  required name="pwd_company_confirm" class="form-control"--}}
+                                                       {{--id="email" placeholder="Confirmar Contraseña"/>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
 
 
                                         <div class="form-group">
@@ -456,7 +458,134 @@
 
 
 
+    <div class="modal fade" id="addCompanyUser" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Agregar Cliente
+                    </h4>
+                </div>
 
+                <!-- Modal Body -->
+                <div class="modal-body">
+
+                    <form class="form-horizontal" action="{{route('add_clients_company')}}" id="frm_client" method="post">
+                        {{@csrf_field() }}
+                        <input type="hidden" id="idComp" name="id_company">
+                        <div class="form-group">
+                            <label  class="col-sm-2 control-label"
+                                    for="inputEmail3">Nombre</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="first_name" class="form-control"
+                                       placeholder="Nombre"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Apellidos</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="last_name" class="form-control"
+                                       placeholder="Apellidos"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Teléfono</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="phone" class="form-control"
+                                       placeholder="Teléfono"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Email</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="email" class="form-control"
+                                       placeholder="Correo Elenctrónico"/>
+                            </div>
+                        </div>
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Contraseña</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="pwd_client" class="form-control"--}}
+                                       {{--placeholder="Contraseña"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        {{--<div class="form-group">--}}
+                            {{--<label class="col-sm-2 control-label"--}}
+                                   {{--for="inputPassword3" >Confirmar Contraseña</label>--}}
+                            {{--<div class="col-sm-10">--}}
+                                {{--<input type="text"  name="confirm_pwd" class="form-control"--}}
+                                       {{--placeholder="Confirmar Contraseña"/>--}}
+                            {{--</div>--}}
+                        {{--</div>--}}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Departamento</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="departamento" class="form-control"
+                                       placeholder="Departamento"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Provincia</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="provincia" class="form-control"
+                                       placeholder="Provincia"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Distrito</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="distrito" class="form-control"
+                                       placeholder="Distrito"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Dirección</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="address" class="form-control"
+                                       placeholder="Dirección"/>
+                            </div>
+                        </div>
+
+
+                        {{--<div class="form-group">--}}
+                        {{--<label class="col-sm-2 control-label"--}}
+                        {{--for="inputPassword3" >Asientos</label>--}}
+                        {{--<div class="col-sm-10">--}}
+                        {{--<input type="text"  name="seat_capacity" class="form-control"--}}
+                        {{--id="inputPassword3" placeholder="Asientos"/>--}}
+                        {{--</div>--}}
+                        {{--</div>--}}
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">
+                                Cerrar
+                            </button>
+                            <input type="submit" value="Registrar" id="btn_client" class="btn btn-primary">
+                        </div>
+                    </form>
+
+                </div>
+
+                <!-- Modal Footer -->
+
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('after_scripts')
@@ -555,6 +684,15 @@
                                         }
                                     }
                                 })
+                            })
+                        }
+
+
+                        const  addUSerc =  document.querySelectorAll(".addUSerc")
+
+                        for (let i = 0; i < addUSerc.length; i++) {
+                            addUSerc[i].addEventListener('click', function () {
+                                idComp.value = addUSerc[i].id
                             })
                         }
                     </script>

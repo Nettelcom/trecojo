@@ -90,7 +90,7 @@
                     <i class="fa fa-wrench"></i></button>
                   <ul class="dropdown-menu" role="menu">
                     <li><a href="#">Report</a></li>
-                  
+
                   </ul>
                 </div>
                 <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
@@ -106,7 +106,7 @@
 
                   <div class="chart">
                     <!-- Sales Chart Canvas -->
-                   
+
                      <canvas id="myChart" style="height:150px"></canvas>
                   </div>
                    <script>
@@ -235,6 +235,6 @@ var myChart = new Chart(ctx, {
         <!-- /.col -->
       </div>
       <!-- /.row -->
-     
+
 
 @endsection

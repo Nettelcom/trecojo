@@ -30,6 +30,10 @@ Route::group([
 
     Route::get('request','AdminController@show_requests');
 
+    Route::get('notifications','AdminController@show_notifications');
+
+    Route::get('show_margin','AdminController@show_margin');
+
     Route::get('owners','AdminController@show_owners');
 
     Route::get('providers','AdminController@show_providers');
@@ -64,11 +68,14 @@ Route::group([
 
     Route::get('chage_status_provider/{id}', 'DriverController@chage_status_provider')->name('chage_status_provider');
 
+
     Route::post('edit-driver', 'DriverController@edit_driver')->name('edit-driver');
 
     Route::get('delete_provider/{id}', 'DriverController@delete_provider')->name('delete_provider');
 
     Route::post('add_car_provider', 'DriverController@add_car_provider')->name('add_car_provider');
+
+    Route::post('get_provider_data', 'DriverController@get_provider_data')->name('get_provider_data');
 
     Route::get('consult_ruc', 'DriverController@ruc')->name('ruc');
 
@@ -88,9 +95,20 @@ Route::group([
 
     Route::post('update_company', 'CompanyController@update_company')->name('update_company');
 
+    Route::post('get_users_company', 'CompanyController@get_users_company')->name('get_users_company');
+
+
     Route::get('clients', 'ClientsController@show_clients')->name('show_clients');
 
+    Route::get('addUserCompany/{idC}/{idU}', 'ClientsController@addUserCompany')->name('addUserCompany');
+
+    Route::get('deleteUserCompany/{id}', 'ClientsController@deleteUserCompany')->name('deleteUserCompany');
+
     Route::post('add_clients', 'ClientsController@add_clients')->name('add_clients');
+
+    Route::post('get_company_user', 'ClientsController@get_company_user')->name('get_company_user');
+
+    Route::post('add_clients_company', 'ClientsController@add_clients_company')->name('add_clients_company');
 
     Route::get('delete_client/{id}', 'ClientsController@delete_client')->name('delete_client');
 
@@ -101,6 +119,8 @@ Route::group([
     Route::post('update_client_pwd', 'ClientsController@update_client_pwd')->name('update_client_pwd');
 
     Route::post('update_data_request', 'RequestController@update_data_request')->name('update_data_request');
+
+    Route::post('getDataForId', 'RequestController@getDataForId')->name('getDataForId');
 
     Route::post('update_detail_request', 'RequestController@update_detail_request')->name('update_detail_request');
 
@@ -137,6 +157,14 @@ Route::group([
     Route::post('add_user', 'OwnerController@add_user')->name('add_user');
 
     Route::post('get_payments_for_type', 'PaymentController@get_payments_for_type')->name('get_payments_for_type');
+
+    Route::post('get_margin_id', 'PaymentController@get_margin_id')->name('get_margin_id');
+
+    Route::post('filter_payments', 'PaymentController@filter_payments')->name('filter_payments');
+
+    Route::post('filter_margin_payments', 'PaymentController@filter_margin_payments')->name('filter_margin_payments');
+
+    Route::get('rememberRequest', 'RequestController@rememberRequest')->name('rememberRequest');
 
 });
 

@@ -23,5 +23,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'cors'], function(){
     Route::post('/company', 'Api\UseraController@addCompany')->name('addCompany');
     Route::post('/addRequestClient', 'Api\UseraController@addRequestClient')->name('addRequestClient');
     Route::post('/addRequestCompany', 'Api\UseraController@addRequestCompany')->name('addRequestCompany');
+    Route::post('/add_clients_company_api', 'Api\UseraController@add_clients_company_api')->name('add_clients_company_api');
 });
 

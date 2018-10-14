@@ -13,13 +13,13 @@ return [
 
     // Project name. Shown in the breadcrumbs and a few other places.
     //'project_name' => 'i_Taxi',
-    'project_name' => 'T-RECOJO',
+    'project_name' => 'TRECOJO',
 
     // Menu logos
     /*'logo_lg'   => '<i>i</i>Taxi',
     'logo_mini' => '<b>I</b>t',*/
-    'logo_lg'   => 'T-RECOJO',
-    'logo_mini' => 'T-R',
+    'logo_lg'   => 'TRECOJO',
+    'logo_mini' => 'TR',
     // Developer or company name. Shown in footer.
     //'developer_name' => 'Vincent Chacha',
     'developer_name' => 'Nettelcom SAC',

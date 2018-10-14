@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Request;
 use App\RequestCompany;
+use Carbon\Carbon;
 use Illuminate\Http\Request as Rq;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class RequestController extends Controller
 {
@@ -93,6 +95,7 @@ class RequestController extends Controller
     }
 
     public  function add_request_modal_company(Rq $request) {
+//        return $request->all();
         $req= new RequestCompany;
         $new_date_arrive = date('Y-m-d\TH:i', strtotime($request->input('date_arrive')));
         $req->company_id = $request->input('client_id');
@@ -100,8 +103,16 @@ class RequestController extends Controller
         $req->start_address = $request->input('start_address');
         $req->end_address = $request->input('end_address');
         $req->date_arrive = $new_date_arrive;
+        $req->client_id =  $request->input('user_id');
+        $req->provider_id =  $request->input('provider_id');
+        $req->status_travel =  1;
+        $req->id_type_car =  $request->input('id_type_car');
+        if($request->is_courier == "on") {
+            $req->is_courier = 1;
+        }
         $req->save();
         return back();
+
 
     }
 
@@ -114,6 +125,12 @@ class RequestController extends Controller
         $req->start_address = $request->input('start_address');
         $req->end_address = $request->input('end_address');
         $req->date_arrive = $new_date_arrive;
+        $req->provider_id =  $request->input('provider_id');
+        $req->status_travel =  1;
+        $req->id_type_car =  $request->input('id_type_car');
+        if($request->is_courier == "on") {
+            $req->is_courier = 1;
+        }
         $req->save();
         return back();
     }
@@ -194,5 +211,75 @@ class RequestController extends Controller
         $req->payment_type_id = $request->input('payment_type_id');
         $req->save();
         return back();
+    }
+
+
+
+
+
+
+
+
+    public  function rememberRequest() {
+//        $reqsClients = Request::where("is_view", 0)->get();
+//        $reqsCompanies= RequestCompany::where("is_view", 0)->get();
+        $date = date("Y-m-d");
+        $reqsClients = DB::select("SELECT * FROM requests WHERE date(date_arrive) >= '$date' and is_view = 0 ");
+        $reqsCompanies=  DB::select("SELECT * FROM requests_companies WHERE date(date_arrive) >= '$date' and is_view = 0");
+
+        $dataClient []= ["id" => 0];
+        $dataCompany []= ["idC" => 0];
+        foreach ($reqsClients as $reqClient) {
+
+                    $dataClient[] =
+                        [
+                            "id" => $reqClient->id,
+                        ];
+
+        }
+
+        foreach ($reqsCompanies as $reqCompany) {
+
+                $dataCompany[] = [
+                    "idC" => $reqCompany->id,
+                ];
+
+        }
+        $dataRequest = [
+            "client" => $dataClient,
+            "company" => $dataCompany
+
+        ];
+        return $dataRequest;
+    }
+    public  function getDataForId(Rq $request) {
+            if($request -> ajax()) {
+                    $ids = $request->input('json_ids');
+
+//                        for( $i = 0; $i < count($ids["client"]); $i++) {
+//                            $idCli = $ids["client"][$i]["id"];
+//                            if($idCli != 0) {
+//                                $request_clients =  Request::find($idCli);
+//                                $request_clients->is_view = 1;
+//                                $request_clients->save();
+//                            }
+//
+//                        }
+
+//
+//                for( $i = 0; $i < count($ids["company"]); $i++) {
+//                    $idComp = $ids["company"][$i]["idC"];
+//                    if($idComp != 0) {
+//                        $requests_company = RequestCompany::find($idComp);
+//                        $requests_company->is_view = 1;
+//                        $requests_company->save();
+//                    }
+//
+//
+//
+//                }
+                    return  response() ->json([$request->input('json_ids')]);
+
+            }
     }
 }

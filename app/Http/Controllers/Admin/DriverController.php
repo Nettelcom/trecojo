@@ -7,6 +7,7 @@ use App\Company;
 use App\Provider;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class DriverController extends Controller
@@ -17,29 +18,30 @@ class DriverController extends Controller
         $rules = [
 //            'base_distance' => "required",
 
-            'anio' => "required",
-            'type' => "required",
-            'color' => "required",
-            'seat_capacity' => "required",
+//            'anio' => "required",
+//            'type' => "required",
+//            'color' => "required",
+//            'seat_capacity' => "required",
             'placa' => "required",
             'first_name' => "required",
             'last_name' => "required",
             'email' => "required",
             'contacts' => "required",
-            'picture' => "required",
+
+//            'picture' => "required",
         ];
         $messages = [
 //            'base_distance.required' => "La distancia es requerida",
-            'type.required' => "El tipo es requerido",
-            'color.required' => "El color  es requerido",
-            'anio.required' => "El año es  requerido",
-            'seat_capacity.required' => "La capacidad del vehículo es requerida",
+//            'type.required' => "El tipo es requerido",
+//            'color.required' => "El color  es requerido",
+//            'anio.required' => "El año es  requerido",
+//            'seat_capacity.required' => "La capacidad del vehículo es requerida",
             'placa.required' => "La placa es requerida",
             'first_name.required' => "El nombre es requerido",
             'last_name.required' => "El apellido es requerido",
             'email.required' => "El correo es requerido",
             'contacts.required' => "El número es requerido",
-            'picture.required' => "La imagen es requerida",
+//            'picture.required' => "La imagen es requerida",
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -56,8 +58,9 @@ class DriverController extends Controller
         $driver->last_name = $request->input('last_name');
         $driver->email = $request->input('email');
         $driver->contacts = $request->input('contacts');
-        $driver->picture = $request->file('picture')->store('public');
+//        $driver->picture = $request->file('picture')->store('public');
         $driver->approval_status = $approval_status;
+        $driver->number_acount = $request->input('number_acount');
         $driver->save();
         $driver_id = $driver->id;
 
@@ -116,9 +119,9 @@ class DriverController extends Controller
         $driver->email = $request->input('email');
 //        $driver->vehicle_id = $request->input('placa');
         $driver->contacts = $request->input('contacts');
-        if($request->file('picture') != "") {
-            $driver->picture = $request->file('picture')->store('public');
-        }
+//        if($request->file('picture') != "") {
+//            $driver->picture = $request->file('picture')->store('public');
+//        }
         $driver->approval_status = $approval_status;
 
         $driver->cartype()->update([
@@ -166,12 +169,10 @@ class DriverController extends Controller
                 'success' => false,
                 'error' => 'Número de RUC ya registrado'
             ]);
-//            $rucaconsultar = $request->input('ruc_value');
 
-//            return json_encode();
         }
         $ruta = "https://ruc.com.pe/api/v1/ruc";
-        $token = "0f285ab2-0a81-4dec-bbbb-944536f60f45-b13a42f2-e055-412d-abb2-6c0166391595";
+        $token = "a2445df4-5a39-43aa-8a94-000ab3ad2961-50252a7a-ad97-4548-ad3f-64ad495aa1b0";
 
 
 
@@ -203,6 +204,23 @@ class DriverController extends Controller
         } else {
             //Mostramos la respuesta
             return  json_encode($leer_respuesta);
+        }
+    }
+    public  function get_provider_data(Request $request) {
+        if($request->ajax()) {
+            $id = $request->input('idCar');
+            $providers = DB::select("select first_name, last_name, providers.id from providers inner join cartypes on
+                  cartypes.idprovider = providers.id and type = $id");
+            $html = ' <option value="">Conductores</option>';
+
+            foreach ($providers as $provider) {
+                $html .= "<option value='{$provider->id}'>{$provider->first_name}   {$provider->last_name} </option>";
+            }
+            return response()->json([
+                'opts' => $html
+            ]);
+
+
         }
     }
 }
