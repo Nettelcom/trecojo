@@ -3,11 +3,11 @@
 @section('header')
     <section class="content-header">
       <h1>
-        Pagos<small>Mostrar el estado de pagos</small>
+        Ingresos<small>Mostrar el Estado de Ingresos</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{ url(config('backpack.base.route_prefix', 'admin')) }}">{{ config('backpack.base.project_name') }}</a></li>
-        <li class="active">Pagos</li>
+        <li class="active">Ingresos</li>
         
       </ol>
 
@@ -45,14 +45,14 @@
 
         </div>
     </div>
-                <div class="row">
+     <div class="row">
         <div  class="col-lg-3 col-xs-5 buttons_payments" id="0">
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
               <h3>S/.{{$costs_amounts['all']}}</h3>
 
-              <p>Pago Total</p>
+              <p>Ingresos Totales</p>
             </div>
             <div class="icon">
               <i class="ion ion-bag"></i>
@@ -60,8 +60,39 @@
             <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+
+         <div  class="col-lg-3 col-xs-5 buttons_payments" id="0">
+             <!-- small box -->
+             <div class="small-box bg-lime">
+                 <div class="inner">
+                     <h3>S/.{{$costs_amounts['conductores']}}</h3>
+
+                     <p>Pago a Conductores</p>
+                 </div>
+                 <div class="icon">
+                     <i class="ion ion-bag"></i>
+                 </div>
+                 <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+             </div>
+         </div>
+         <div  class="col-lg-3 col-xs-5 buttons_payments" id="0">
+             <!-- small box -->
+             <div class="small-box bg-teal">
+                 <div class="inner">
+                     <h3>S/.{{$costs_amounts['margin']}}</h3>
+
+                     <p>Margen de Ganancia</p>
+                 </div>
+                 <div class="icon">
+                     <i class="ion ion-bag"></i>
+                 </div>
+                 <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+             </div>
+         </div>
+     </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6 buttons_payments" id="1">
+    <div class="row">
+        <div class="col-lg-3 col-xs-1 buttons_payments" id="1">
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
@@ -75,14 +106,30 @@
             <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
           </div>
         </div>
+
+
+        <div class="col-lg-3 col-xs-1 buttons_payments" id="2">
+            <!-- small box -->
+            <div class="small-box bg-blue">
+                <div class="inner">
+                    <h3>S/.{{$costs_amounts['credito']}}<sup style="font-size: 20px"></sup></h3>
+
+                    <p>Credito</p>
+                </div>
+                <div class="icon">
+                    <i class="ion ion-android-contact"></i>
+                </div>
+                <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+            </div>
+        </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6 buttons_payments" id="2">
+        <div class="col-lg-3 col-xs-1 buttons_payments" id="3">
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-              <h3>S/.{{$costs_amounts['tarjeta']}}</h3>
+              <h3>S/.{{$costs_amounts['trans']}}</h3>
 
-              <p>Crédito</p>
+              <p>Transferencia</p>
             </div>
             <div class="icon">
               <i class="ion ion-person-add"></i>
@@ -91,13 +138,13 @@
           </div>
         </div>
         <!-- ./col -->
-        <div class="col-lg-3 col-xs-6 buttons_payments" id="3">
+        <div class="col-lg-3 col-xs-6 buttons_payments" id="4">
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3>S/.{{$costs_amounts['otros']}}</h3>
+              <h3>S/.{{$costs_amounts['depo']}}</h3>
 
-              <p>Otros tipos de pagos</p>
+              <p>Depósito</p>
             </div>
             <div class="icon">
               <i class="ion ion-pie-graph"></i>
@@ -106,7 +153,7 @@
           </div>
         </div>
         <!-- ./col -->
-      </div>
+    </div>
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default">
@@ -138,7 +185,7 @@
                     <th>Usuario</th>
                   <th>Conductor</th>
                   {{--<th>Estado</th>--}}
-                  <th>Monto Totall</th>
+                  <th>Monto Total</th>
                   <th>Pago Conductor</th>
                   <th>Margen</th>
                   {{--<th>Estado del pago</th>--}}
@@ -170,7 +217,7 @@
 
                                 @endforeach
                             </td>
-                               <td >S/.{{$clientL->cost_amount}}</td>
+                               <td >S/.{{$clientL->pTotal}}</td>
                                <td >S/.{{$clientL->cost_provider}}</td>
                                <td >S/.{{$clientL->margin}}</td>
                             <td>
@@ -269,7 +316,7 @@
                                     @endif
                                 @endforeach
                             </td>
-                            <td >S/.{{$companyL->cost_amount}}</td>
+                            <td >S/.{{$companyL->pTotal}}</td>
                             <td >S/.{{$companyL->cost_provider}}</td>
                             <td >S/.{{$companyL->margin}}</td>
                             <td>

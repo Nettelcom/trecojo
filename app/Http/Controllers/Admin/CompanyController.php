@@ -189,13 +189,79 @@ class CompanyController extends Controller
         $idC = $request->input('id_company');
          $users_company = DB::select("select clients.id, clients.first_name, clients.last_name from clients INNER JOIN company_users on clients.id = company_users.id_user
                  where company_users.id_company = $idC ");
+        $types = DB::select("select type_payments.id, type_payments.type_payment from type_payments INNER  JOIN 
+                  settings_payments_company on settings_payments_company.id_payment = type_payments.id where settings_payments_company.id_company = $idC");
          $html = "<option value='empty'>Usuarios De Empresa</option>";
+        $type_html =  "<option>Tipos de Pago</option>";
          foreach ($users_company as $user ) {
              $html .= "<option value='{$user->id}'>";
              $html .= "{$user->first_name}  {$user->last_name}";
              $html .= "</option>";
          }
+        if( count( $types) > 0 ) {
+            foreach ( $types as $type) {
+                $type_html.= "<option value='{$type->id}'>{$type->type_payment}</option>";
+            }
+        }
 
-        return response()->json(["opts" => $html]);
+        return response()->json(["opts" => $html, "type_pa" => $type_html]);
+    }
+    public  function approval_status_company($id) {
+        $client = Company::find($id);
+        if($client->is_approval == 0) {
+            $client-> is_aproval = 1;
+        }else {
+            $client->is_aproval = 0;
+        }
+        $client->save();
+        return back();
+    }
+
+    public  function getTypePaymentsForCompany(Request $request) {
+        if( $request->ajax() ) {
+            $id = $request->input("id");
+
+            $pymts = DB::select(" select settings_payments_company.id as id_setting, type_payments.id, type_payment from type_payments inner JOIN  settings_payments_company
+ on settings_payments_company.id_payment = type_payments.id inner join company on settings_payments_company.id_company = company.id
+ where settings_payments_company.id_company = $id");
+
+            $noPymts = DB::select("SELECT t1.id,type_payment  FROM type_payments t1  
+ WHERE   NOT EXISTS (SELECT NULL FROM  settings_payments_company t3
+ WHERE t3.id_payment = t1.id  and t3.id_company = $id) ");
+            $myPaymets = "";
+            $outPaymets = "";
+            if ( count($pymts) > 0 ) {
+                foreach ($pymts as $pymt) {
+                    $myPaymets .= "<tr >";
+                    $myPaymets .= "<td  >{$pymt->type_payment}</td>";
+                    $myPaymets .= "<td><a href='deletePaymentCompany/{$pymt->id_setting}' class='btn btn-danger'><i class='fa fa-trash'></i></a></td>";
+                }
+            }
+            if ( count($noPymts ) > 0  ) {
+                foreach ( $noPymts as $noPymt) {
+                    if($noPymt->id == 1 || $noPymt->id == 2) {
+                        $outPaymets .= "<tr >";
+                        $outPaymets .= "<td >{$noPymt->type_payment}</td>";
+                        $outPaymets .= "<td><a href='setPaymentCompany/{$id}/{$noPymt->id}' class='btn btn-success'><i class='fa fa-save'></i></a></td>";
+                    }
+                }
+            }
+            $response = [
+                "myPayments" => $myPaymets,
+                "noPayments" => $outPaymets
+            ];
+            return response()->json($response);
+
+        }
+    }
+    public  function setPaymentCompany($idC, $idP) {
+        $insert = DB::select("insert into settings_payments_company(id_payment, id_company)
+                        values ($idP, $idC)");
+        return back();
+    }
+
+    public  function deletePaymentCompany($id) {
+        DB::select("delete from  settings_payments_company where id = $id");
+        return  back();
     }
 }

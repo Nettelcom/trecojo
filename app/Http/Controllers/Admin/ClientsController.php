@@ -13,10 +13,14 @@ use Illuminate\Support\Facades\Validator;
 class ClientsController extends Controller
 {
     public function show_clients(){
-        $clients = Clients::paginate(10);
+        $clients = Clients::where("is_aproval", 1)->paginate(10);
+        $pendients = Clients::where("is_aproval", 0)->paginate(10);
 
-        return view('clients', compact('clients'));
+
+
+        return view('clients', compact('clients', 'pendients'));
     }
+
     public  function add_clients(Request $request) {
 //            Clients::created([])
         $rules = [
@@ -24,6 +28,7 @@ class ClientsController extends Controller
             'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required',
+            "dni" => "required",
 //            'pwd_client' => 'required|same:confirm_pwd',
 //            'departamento' => 'required',
 //            'provincia' => 'required',
@@ -42,29 +47,39 @@ class ClientsController extends Controller
 //            'provincia.required' => 'El Provincia es requerido',
             'distrito.required' => 'El Disitrito es requerido',
             'address.required' => 'La Direción es requerida',
+            'dni.required' => 'El número de DNI es requerido',
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if( $validator->fails() ) {
             return back()->withErrors($validator)->withInput();
         }else {
+            $valid_dni = Clients::where("dni", $request->input("dni"))->get();
+            if(count($valid_dni) > 0) {
+                return back()->with("fail", "El DNI ya se encuentra registrado");
+
+            }else {
+
 
 //            $encrypt_pwd = md5($request->input('pwd_client'));
-            $client = new Clients;
-            $client->first_name = $request->input('first_name');
-            $client->last_name = $request->input('last_name');
-            $client->phone = $request->input('phone');
-            $client->email = $request->input('email');
+                $client = new Clients;
+                $client->first_name = $request->input('first_name');
+                $client->last_name = $request->input('last_name');
+                $client->phone = $request->input('phone');
+                $client->email = $request->input('email');
+                $client->dni = $request->input('dni');
 //            $client->pwd_client = $encrypt_pwd ;
-            $client->pwd_client = md5($request->input('phone')) ;
+                $client->pwd_client = md5($request->input('phone'));
 //            $client->departamento = $request->input('departamento');
 //            $client->provincia = $request->input('provincia');
-            $client->distrito = $request->input('distrito');
-            $client->address = $request->input('address');
-            if($request->input('id_company')) {
-                $client->id_company = $request->input('id_company');
+                $client->distrito = $request->input('distrito');
+                $client->address = $request->input('address');
+                if ($request->input('id_company')) {
+                    $client->id_company = $request->input('id_company');
+                }
+                $client->save();
+
+                return back();
             }
-            $client->save();
-            return back();
         }
 
     }
@@ -211,7 +226,7 @@ class ClientsController extends Controller
                     $no_empresa .= "<tr>";
                     $no_empresa .= "<td width='400px'>{$c->r_social}</td>";
                     $no_empresa .= '<td>';
-                    $no_empresa .= "<a  href='addUserCompany/{$c->id}/{$request->input('idClient')}' class='btn btn-success' value=''><i class='fa fa-trash'></i></a>";
+                    $no_empresa .= "<a  href='addUserCompany/{$c->id}/{$request->input('idClient')}' class='btn btn-success' value=''><i class='fa fa-save'></i></a>";
                     $no_empresa .= "</td>";
                     $no_empresa .= "</tr>";
             }
@@ -232,5 +247,62 @@ class ClientsController extends Controller
         $cUser =  CompanyUsers::find($id);
         $cUser->delete();
         return back();
+    }
+
+    public  function approval_status($id) {
+        $client = Clients::find($id);
+        if($client->is_approval == 0) {
+            $client-> is_aproval = 1;
+        }else {
+            $client->is_aproval = 0;
+        }
+        $client->save();
+        return back();
+    }
+
+    public function  getTypePaymentsForUser(Request $request) {
+        if( $request->ajax() ) {
+            $id = $request->input("id");
+
+            $pymts = DB::select("select settings_payments_user.id as id_setting, type_payments.id, type_payment from type_payments inner JOIN  settings_payments_user
+                            on settings_payments_user.id_payment = type_payments.id inner join clients on settings_payments_user.id_user = clients.id
+                            where settings_payments_user.id_user = $id");
+
+            $noPymts = DB::select("SELECT t1.id,type_payment  FROM type_payments t1  
+ WHERE   NOT EXISTS (SELECT NULL FROM  settings_payments_user t3
+ WHERE t3.id_payment = t1.id  and t3.id_user = $id) ");
+            $myPaymets = "";
+            $outPaymets = "";
+            if ( count($pymts) > 0 ) {
+                    foreach ($pymts as $pymt) {
+                        $myPaymets .= "<tr >";
+                        $myPaymets .= "<td  >{$pymt->type_payment}</td>";
+                        $myPaymets .= "<td><a href='deletePaymentUser/{$pymt->id_setting}' class='btn btn-danger'><i class='fa fa-trash'></i></a></td>";
+                    }
+            }
+            if ( count($noPymts ) > 0  ) {
+                foreach ( $noPymts as $noPymt) {
+
+                    $outPaymets .= "<tr >";
+                    $outPaymets .= "<td >{$noPymt->type_payment}</td>";
+                    $outPaymets .= "<td><a href='setPaymentUser/{$id}/{$noPymt->id}' class='btn btn-success'><i class='fa fa-save'></i></a></td>";
+                }
+            }
+        $response = [
+            "myPayments" => $myPaymets,
+            "noPayments" => $outPaymets
+        ];
+            return response()->json($response);
+
+        }
+    }
+    public  function setPaymentUser($idUser, $idPayment) {
+        $insert = DB::select("insert into settings_payments_user(id_payment, id_user)
+                        values ($idPayment, $idUser)");
+        return back();
+    }
+    public  function deletePaymentUser($id) {
+        DB::select("delete from  settings_payments_user where id = $id");
+        return  back();
     }
 }

@@ -41,6 +41,13 @@
                         </ul>
                     </div>
                 @endif
+                @if (\Session::has('fail'))
+                    <div class="alert alert-danger">
+                        <ul>
+                            <li>{!! \Session::get('fail') !!}</li>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>
@@ -59,10 +66,11 @@
             <div style="margin-left: 10px">
                 <button class="btn btn-primary" data-toggle="modal" id="btn_add_client" data-target="#addClient">Agregar Cliente</button>
             </div>
-        </div><div class="box-body">
-            <table id="example2" class="table table-bordered table-striped">
-                <thead>
-                <tr>
+        </div>
+        <div class="box-body">
+            <table id="example2" class="table-striped" style="width: 100%; text-align: center">
+                <thead >
+                <tr align="center">
                     <th>#id</th>
                     <th>Nombres</th>
                     {{--<th>Distancia minima</th>--}}
@@ -90,6 +98,7 @@
                         <button title="Actualizar Datos" data-toggle="modal" data-target="#updateClient" class="btn btn-success btn_edit" id="{{$client->id}}"><i class="fa fa-edit"></i> </button>
                         <button title="Cambiar Contraseña" data-toggle="modal" data-target="#updatePwd" class="btn btn-warning btn_pwd_update" id="{{$client->id}}"><i class="fa fa-key"></i></button>
                         <button title="Empresas de Usuario" data-toggle="modal" data-target="#companyUsers" class="btn btn-adn btn_company_user" id="{{$client->id}}"><i class="fa fa-home"></i></button>
+                        <button class="btn btn-primary type_payment"   data-toggle="modal" data-target="#type_payments" id="{{$client->id}}"><i class="fa fa-cogs"></i></button>
                         <a href="{{route("delete_client", [$client->id])}}" class="btn btn-danger"  title="Eliminar"><i class="fa fa-trash"></i> </a>
                         </td>
                     </tr>
@@ -100,7 +109,100 @@
             {!! $clients->render() !!}
     </div>
 
-        {{--MODAL--}}
+
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Clientes Pendientes</div>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="box">
+        <div class="box-header" style="display: flex">
+            {{--<form>--}}
+            <div class="input-group input-group-sm" style="width: 150px;">
+
+                <input type="text" class="form-control pull-right" name="txt_search" placeholder="Buscar...">
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            {{--</form>--}}
+
+            <div style="margin-left: 10px">
+                {{--<button class="btn btn-primary" data-toggle="modal" id="btn_add_client" data-target="#addClient">Agregar Cliente</button>--}}
+            </div>
+        </div>
+        <div class="box-body">
+            <table id="example2" class="table-striped" style="width: 100%; text-align: center">
+                <thead >
+                <tr align="center" style="font-weight: bold ;">
+                    <td>#id</td>
+                    <td>Nombres</td>
+                    <td>DNI</td>
+                    <td>Teléfono</td>
+                    <td>Email</td>
+                    <td>Direccíon</td>
+                    {{--<th>Departamento</th>--}}
+                    {{--<th>Provincia</th>--}}
+                    <td>Distrito</td>
+                    <td style="text-align: center">Opciones</td>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach($pendients as $client)
+                    <tr>
+                        <td>{{$client->id}}</td>
+                        <td>{{$client->first_name}}  {{$client->last_name}}</td>
+                        <td>{{$client->dni}}</td>
+                        <td>{{$client->phone}}</td>
+                        <td>{{$client->email}}</td>
+                        <td>{{$client->address}}</td>
+                        {{--<td>{{$client->departamento}}</td>--}}
+                        {{--<td>{{$client->provincia}}</td>--}}
+                        <td>{{$client->distrito}}</td>
+                        <td style="text-align: center">
+                            <a href="{{route("approval_status", [$client->id])}}" class="btn btn-xs btn-success" title="Aceptar Solicitud"><i class="fa fa-check"></i></a>
+                            {{--<button title="Actualizar Datos" data-toggle="modal" data-target="#updateClient" class="btn btn-success btn_edit" id="{{$client->id}}"><i class="fa fa-edit"></i> </button>--}}
+                            {{--<button title="Cambiar Contraseña" data-toggle="modal" data-target="#updatePwd" class="btn btn-warning btn_pwd_update" id="{{$client->id}}"><i class="fa fa-key"></i></button>--}}
+                            {{--<button title="Empresas de Usuario" data-toggle="modal" data-target="#companyUsers" class="btn btn-adn btn_company_user" id="{{$client->id}}"><i class="fa fa-home"></i></button>--}}
+                            {{--<a href="{{route("delete_client", [$client->id])}}" class="btn btn-danger"  title="Eliminar"><i class="fa fa-trash"></i> </a>--}}
+                        </td>
+                    </tr>
+
+                @endforeach
+                </tbody>
+            </table>
+            {!! $clients->render() !!}
+        </div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    {{--MODAL--}}
 
         <div class="modal fade" id="addClient" tabindex="-1" role="dialog"
              aria-labelledby="myModalLabel" aria-hidden="true">
@@ -137,6 +239,14 @@
                                 <div class="col-sm-10">
                                     <input type="text"  name="last_name" class="form-control"
                                          placeholder="Apellidos"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"
+                                       for="inputPassword3" >Número de DNI</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  id="dni" name="dni"  maxlength="8" class="form-control"
+                                           placeholder="DNI"/>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -493,6 +603,67 @@
                 </div>
             </div>
         </div>
+    <div class="modal fade" id="type_payments" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+
+                </div>
+                <div class="modal-body">
+                <!-- Modal Body -->
+                <h4 class="modal-title" id="myModalLabel">
+                    Tipo de Pago Relacionados
+                </h4>
+                <table  class="table table-striped">
+                    <th>Empresas</th>
+                    <th>Quitar</th>
+                    <tbody id="myPaymets">
+
+                    </tbody>
+                </table>
+
+
+
+                <h4 class="modal-title" id="myModalLabel">
+                    Agregar Tipos de Pago
+                </h4>
+                <table  class="table table-striped">
+                    <th>Empresas</th>
+                    <th>Agregar</th>
+                    <tbody id="noPaymets">
+
+                    </tbody>
+                </table>
+
+
+
+
+
+
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">
+                            Cerrar
+                        </button>
+                        <input type="submit" value="Agregar"  class="btn btn-primary">
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+
 
 @endsection
 @section('after_scripts')
@@ -590,6 +761,24 @@
                         }
                     })
                 })
+            }
+            const type_payment = document.querySelectorAll(".type_payment")
+            for(let i = 0; i < type_payment.length; i++) {
+                type_payment[i].addEventListener("click", function () {
+
+                    $.ajax({
+                        url: "getTypePaymentsForUser",
+                        data:{id:type_payment[i].id },
+                        type: "GET",
+                        dataType: "JSON",
+                        success: function (data) {
+                            console.log(data)
+                            $("#myPaymets").html(data.myPayments)
+                            $("#noPaymets").html(data.noPayments)
+                        }
+                    })
+                })
+
             }
     </script>
 @endsection

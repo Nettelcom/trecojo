@@ -240,10 +240,10 @@
                   <th>#id</th>
                   <th>Nombre</th>
                   <th>Email</th>
-                  <th>Vehículo</th>
+                  {{--<th>Vehículo</th>--}}
                   <th>Teléfono</th>
                   <th>Número de Cuenta</th>
-                  <th>Estado</th>
+                  {{--<th>Estado</th>--}}
                    <th>Opciones</th>
                 </tr>
                 </thead>
@@ -254,29 +254,30 @@
                    <td>{{$provider->id}}</td>
                   <td>{{$provider->first_name }} {{$provider->last_name }}</td>
                   <td>{{$provider->email }}</td>
-                   <td>
-                       @foreach($type_car as $t_car)
-                           @if($provider->cartype[0]->type == $t_car->id)
-                               {{$t_car->type_c}}
-                           @endif
+                   {{--<td>--}}
+                       {{--@foreach($type_car as $t_car)--}}
+                           {{--@if($provider->cartype[0]->type == $t_car->id)--}}
+                               {{--{{$t_car->type_c}}--}}
+                           {{--@endif--}}
 
-                       @endforeach
-                       </td>
+                       {{--@endforeach--}}
+                       {{--</td>--}}
                   <td>{{$provider->contacts }}</td>
 {{--                  <td><a class="imgProvider" id="{{$provider->id}}" data-toggle="modal" data-target="#popUpImg">Ver Imagen</a></td>--}}
                     <td>{{$provider->number_acount}}</td>
-                  <td>
-                        <?php
-                        if ($provider->approval_status == 1):
-                            ?>
-                             <a href='{{route("chage_status_provider",[$provider->id])}}' class='btn btn-success'>Aprobado</a>
-                         <?php
-                        elseif ($provider->approval_status == 0) :
-                            ?>
-                             <a  href='{{route("chage_status_provider",[$provider->id])}}'  class="btn btn-danger btn-sm">Pendiente</a>
-                         <?php
-                        endif
-                        ?></td>
+                  {{--<td>--}}
+<!--                        --><?php
+//                        if ($provider->approval_status == 1):
+//                            ?>
+                             {{--<a href='{{route("chage_status_provider",[$provider->id])}}' class='btn btn-success'>Aprobado</a>--}}
+<!--                         --><?php
+//                        elseif ($provider->approval_status == 0) :
+//                            ?>
+                             {{--<a  href='{{route("chage_status_provider",[$provider->id])}}'  class="btn btn-danger btn-sm">Pendiente</a>--}}
+<!--                         --><?php
+//                        endif
+//                        ?>
+                    {{--</td>--}}
                    <td> <div class="input-group-btn">
                   <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
                     <span class="fa fa-caret-down"></span></button>

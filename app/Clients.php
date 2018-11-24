@@ -16,6 +16,7 @@ class Clients extends Model
          "provincia",
          "distrito",
          "departamento",
-         "id_company"
+         "id_company",
+         "dni"
      ];
 }

@@ -14,13 +14,25 @@
 
 
 @section('content')
+    <style>
+        .ocultar_btn {
+            display: none;
+        }
+    </style>
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default" >
                 <div class="box-header with-border">
                     <div class="box-title">Personas</div>
-                </div>
 
+                </div>
+                @if (\Session::has('fail'))
+                    <div class="alert alert-danger">
+                        <ul>
+                            <li>{!! \Session::get('fail') !!}</li>
+                        </ul>
+                    </div>
+                @endif
             </div>
 
         </div>
@@ -43,34 +55,29 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example1" style="width: 100%; text-align: center" class="table table-striped">
                 <thead>
                 <tr>
-                  <th>#id</th>
                   <th>Cliente</th>
                   <th>Conductor</th>
                   <th>Vehículo</th>
-                  {{--<th>Fecha Recojo</th>--}}
-                  {{--<th>Fecha Fin</th>--}}
-                  <th>Estado</th>
-                  <th>Precio Total</th>
+                    <th>Precio Total</th>
+                    <th>Valor</th>
                     <th>Pago Conductor</th>
                     <th>Margen</th>
                     <th>Origen</th>
                     <th>Destino</th>
-                  {{--<th>Tipo de Pago</th>--}}
+                    <th>Aceptado?</th>
                   <th>Pagado?</th>
                   <th>Opciones</th>
                 </tr>
                 </thead>
                 <tbody id="body_client">
-
                 @foreach($req as $request)
                     <form action="update_data_request" method="post">
                         {{@csrf_field()}}
                         <input type="hidden" name="idRequest" value="{{$request->id}}">
                 <tr>
-                    <td>{{$request->id}}</td>
                     <td>
                             @foreach($clients as $client)
                                 @if($request->client_id == $client->id)
@@ -94,13 +101,6 @@
                                                     @endif()
                                      @endif
                           @endforeach
-                                {{--<option value="{{$provider->id}}"--}}
-                                {{--@if($provider->id == $request->provider_id)--}}
-                                        {{--selected="selected"--}}
-                                        {{--@endif--}}
-                                {{-->{{$provider->first_name}}  {{$provider->last_name}}</option>--}}
-
-
                          @endforeach
                         </select>
 
@@ -113,33 +113,20 @@
 
                         @endforeach
                     </td>
-                    {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request->date_arrive}}"  name="date_arrive"></td>--}}
-                    {{--<td><input type="datetime-local"class="form-control"  value="{{$request->end}}"  name="date_end"></td>--}}
-                    <td style="text-align: center">
-                        @if($request->status_request == 0)
-                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
-                         @else
-                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
-                        @endif
-                    </td>
+                    <td style="display: none"><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="pTotal" readonly="readonly" value="{{$request->pTotal}}"></td>
+                    <td><strong>{{$request->pTotal}}</strong></td>
                     <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$request->cost_amount}}"></td>
                     <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$request->cost_provider}}"></td>
                     <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$request->margin}}"></td>
                     <td>{{$request->start_address}}</td>
                     <td>{{$request->end_address}}</td>
-                    {{--<td>--}}
-                        {{--<select class="form-control" name="payment_type_id" id="">--}}
-                            {{--<option value="">Tipo de Pago</option>--}}
-                                {{--@foreach($payments as $payment)--}}
-                                {{--<option value="{{$payment->id}}"--}}
-                                    {{--@if($request->payment_type_id == $payment->id)--}}
-                                        {{--selected="selected"--}}
-                                     {{--@endif--}}
-                                {{-->{{$payment->type_payment}}</option>--}}
-
-                                {{--@endforeach--}}
-                        {{--</select>--}}
-                    {{--</td>--}}
+                    <td style="text-align: center">
+                        @if($request->status_request == 0)
+                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
+                        @else
+                            <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
+                        @endif
+                    </td>
                     <td style="text-align: center">
                         @if($request->is_paint == 0)
                             <a href="{{route("change_is_payment_request",[$request->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
@@ -149,7 +136,6 @@
 
                     </td>
                     <td>
-                        {{--<button data-toggle="modal" data-target="#showCar" class="btn btn-success btn-edit" ><i class="fa fa-edit"></i> Grabar</button>--}}
                         <label for="save_data"><button class="btn btn-success" title="Grabar"><i class="fa fa-save"></i></button></label>
                         <input type="submit" value="Grabar" id="save_data" class="btn btn-success hidden">
                         <a data-toggle="modal" data-target="#detailsRequest" class="btn btn-info btn_details_request" id="{{$request->id}}" title="Ver Detalles" ><i class="fa fa-plus"></i></a>
@@ -200,18 +186,19 @@
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>#id</th>
+                    {{--<th>#id</th>--}}
                     <th>Cliente</th>
                     <th>Conductor</th>
                     <th>Vehículo</th>
                     {{--<th>Fecha Recojo</th>--}}
                     {{--<th>Fecha Fin</th>--}}
-                    <th>Estado</th>
                     <th>Precio Total</th>
+                    <th>Valor</th>
                     <th>Pago Conductor</th>
                     <th>Margen</th>
                     <th>Origen</th>
                     <th>Destino</th>
+                    <th>Aceptado</th>
                     {{--<th>Tipo de Pago</th>--}}
                     <th>Pagado?</th>
                     <th>Opciones</th>
@@ -224,7 +211,7 @@
                         {{@csrf_field()}}
                         <input type="hidden" name="idRequest" value="{{$request->id}}">
                         <tr>
-                            <td>{{$request->id}}</td>
+                            {{--<td>{{$request->id}}</td>--}}
                             <td>
                                 @foreach($clients as $client)
                                     @if($request->client_id == $client->id)
@@ -269,6 +256,15 @@
                             </td>
                             {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request->date_arrive}}"  name="date_arrive"></td>--}}
                             {{--<td><input type="datetime-local"class="form-control"  value="{{$request->end}}"  name="date_end"></td>--}}
+
+                            <td>{{ $request->pTotal }}</td>
+                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$request->cost_amount}}"></td>
+                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$request->cost_provider}}"></td>
+                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$request->margin}}"></td>
+                            <td style="display: none"><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="pTotal" readonly="readonly" value="{{$request->pTotal}}"></td>
+
+                            <td>{{$request->start_address}}</td>
+                            <td>{{$request->end_address}}</td>
                             <td style="text-align: center">
                                 @if($request->status_request == 0)
                                     <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
@@ -276,11 +272,6 @@
                                     <a href="{{route("change_state_request",[$request->id])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                                 @endif
                             </td>
-                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$request->cost_amount}}"></td>
-                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$request->cost_provider}}"></td>
-                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$request->margin}}"></td>
-                            <td>{{$request->start_address}}</td>
-                            <td>{{$request->end_address}}</td>
                             {{--<td>--}}
                             {{--<select class="form-control" name="payment_type_id" id="">--}}
                             {{--<option value="">Tipo de Pago</option>--}}
@@ -387,7 +378,7 @@
                                    for="inputPassword3" >Fecha/Hora Pedido</label>
                             <div class="col-sm-10">
                                 <input type="datetime-local"  name="date_request" class="form-control"
-                                       id="date_request_detail" placeholder="Nueva Contraseña"/>
+                                       id="date_request_detail" placeholder="Hora Pedido"/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -395,7 +386,7 @@
                                    for="inputPassword3">Fecha/Hora de embarque</label>
                             <div class="col-sm-10">
                                 <input type="datetime-local"  name="date_arrive" class="form-control"
-                                       id="date_arrive_detail" placeholder="Confirme Contraseña"/>
+                                       id="date_arrive_detail" placeholder="Hora Embarque"/>
                             </div>
                         </div>
                        <div class="form-group">
@@ -403,9 +394,65 @@
                                    for="inputPassword3">Fecha/Hora de Llegada</label>
                             <div class="col-sm-10">
                                 <input type="datetime-local"  name="date_end" class="form-control"
-                                       id="date_end_detail" placeholder="Confirme Contraseña"/>
+                                       id="date_end_detail" placeholder="Hora Llegada"/>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Peaje</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="peaje" class="form-control"
+                                       id="peaje" placeholder="Peaje"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Parqueo</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="parqueo" class="form-control"
+                                       id="parqueo" placeholder="Parqueo"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Tiempo de Espera</label>
+                            <div class="col-sm-10" >
+                                <input type="text"  name="tespera" class="form-control"
+                                       id="tespera" placeholder="Tiempo de Espera"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Destino   </label>
+
+                            <div class="col-sm-8" id="div_content">
+                                {{--<div class="col-sm-12" >--}}
+                                <table id="tbl_paradas" class="table table-striped">
+                                    <tr class="paradas">
+                                        <td> <input type="text"  name="paradas[]" class="form-control"
+                                                    id="parada" placeholder="Agregar una Destino" /></td>
+                                        <td><button class="btn btn-danger delete_parada ocultar_btn"><i class="fa fa-trash"></i></button></td>
+                                    </tr>
+                                </table>
+                         </div>
+                                              {{--<div class="col-sm-2">--}}
+                            {{--<button class="btn btn-danger btn-sm" id="delete_parada"><i class="fa fa-trash"></i></button>--}}
+
+
+                                <button class="btn btn-primary btn-sm" id="add_input_destino"><i class="fa fa-plus"></i></button>
+                            </div>
+                        {{--</div>--}}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Observaciones:</label>
+                            <div class="col-sm-8" >
+                                <textarea name="obs" id="obs" cols="5"   rows="10" class="form-control"></textarea>
+                            </div>
+                        </div>
+
+
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default"
@@ -455,7 +502,7 @@
                             <label class="col-sm-2 control-label"
                                    for="inputPassword3">Clientes Registrados</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="client_id" id="">
+                                <select class="form-control" name="client_id" id="cb_client">
                                     <option value="">Clientes</option>
                                     @foreach($clients as $client)
 
@@ -476,13 +523,13 @@
                             <label  class="col-sm-2 control-label"
                                     for="inputEmail3">Tipo de Pago</label>
                             <div class="col-sm-10">
-                                <select class="form-control" name="payment_type_id" id="">
+                                <select class="form-control" name="payment_type_id" id="cb_payment">
                                     <option value="">Tipo de Pago</option>
-                                    @foreach($payments as $payment)
-                                        <option class="valid_type_payment" value="{{$payment->id}}">
-                                            {{$payment->type_payment}}
-                                        </option>
-                                    @endforeach
+                                    {{--@foreach($payments as $payment)--}}
+                                        {{--<option class="valid_type_payment" value="{{$payment->id}}">--}}
+                                            {{--{{$payment->type_payment}}--}}
+                                        {{--</option>--}}
+                                    {{--@endforeach--}}
                                 </select>
                             </div>
                         </div>
@@ -637,6 +684,14 @@
                         </div>
                         <div class="form-group">
                             <label class="col-sm-2 control-label"
+                                   for="inputPassword3" >Número de DNI</label>
+                            <div class="col-sm-10">
+                                <input type="text"  id="dni" name="dni"  maxlength="8" class="form-control"
+                                       placeholder="DNI"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
                                    for="inputPassword3" >Teléfono</label>
                             <div class="col-sm-10">
                                 <input type="text"  name="phone" class="form-control"
@@ -648,7 +703,7 @@
                                    for="inputPassword3" >Email</label>
                             <div class="col-sm-10">
                                 <input type="text"  name="email" class="form-control"
-                                       placeholder="Correo Elenctrónico"/>
+                                       placeholder="Correo Electrónico"/>
                             </div>
                         </div>
                         {{--<div class="form-group">--}}
@@ -695,10 +750,10 @@
                             <label class="col-sm-2 control-label"
                                    for="inputPassword3" >Dirección</label>
                             <div class="col-sm-10">
-                                <input type="text"  name="address" class="form-control"
-                                       placeholder="Dirección"/>
+                                <input type="text"  name="address" class="form-control "  placeholder="Dirección"/>
                             </div>
                         </div>
+
 
 
                         {{--<div class="form-group">--}}
@@ -724,7 +779,6 @@
 
             </div>
         </div>
-    </div>
     {{--FIN MODAL--}}
 
 @endsection
@@ -737,6 +791,8 @@
 
         for(let i = 0; i < btn_details_request.length; i++) {
             btn_details_request[i].addEventListener('click', function () {
+                $(".paradas:eq(0)").children("td").children("input").val(null)
+                $(".paradas").not(":eq(0)").remove()
                 let idRequest = btn_details_request[i].id
                 $.ajax({
                     url: 'details_request',
@@ -744,7 +800,9 @@
                     dataType: 'JSON',
                     method: 'POST',
                     success: function (data) {
-                        console.log(data[0].payment_type_id)
+
+
+                        console.log(data[0].paradas)
 
                         // console.log(data)
                         for(let i = 0; i < valid_type_payment.length; i++) {
@@ -757,6 +815,23 @@
                         date_request_detail.value = data[0].date_request
                         date_arrive_detail.value = data[0].date_arrive
                         date_end_detail.value = data[0].date_end
+                        tespera.value = data[0].tespera
+                        parqueo.value = data[0].parqueo
+                        peaje.value = data[0].peaje
+                        obs.value = data[0].obs
+                        let arrParadas
+                        if (data[0].paradas != "vacio") {
+                            arrParadas = JSON.parse(data[0].paradas)
+                            parada.value = arrParadas[0]
+                            for(let i = 1; i < arrParadas.length; i++) {
+                                const element_tr =  $("#tbl_paradas tbody tr:eq(0)").clone().appendTo("#tbl_paradas");
+                                element_tr.children("td").children("button").css({"display":"block"})
+                                element_tr.children("td").children("input").val(arrParadas[i])
+                            }
+                        }else {
+                            $(".paradas:eq(0)").children("td").children("input").val(null)
+                            $(".paradas").not(":eq(0)").remove()
+                        }
                     }
                 })
             })
@@ -786,6 +861,7 @@
                 let constP = cost_amount[i].parentElement.nextElementSibling.firstChild.value
 
                 cost_amount[i].parentElement.nextElementSibling.nextElementSibling.firstChild.value = costA - constP
+                cost_amount[i].parentElement.nextElementSibling.nextElementSibling.nextElementSibling.firstChild.value = costA
 
                // console.log()
 
@@ -813,6 +889,36 @@
                 }
             })
         })
+
+        add_input_destino.addEventListener("click", function (e) {
+            e.preventDefault()
+            // alert("fds")
+        const element_tr =    $("#tbl_paradas tbody tr:eq(0)").clone().appendTo("#tbl_paradas");
+            element_tr.children("td").children("button").css({"display":"block"})
+            element_tr.children("td").children("input").val("")
+        });
+
+        $(document).on("click",".delete_parada",function(e){
+            e.preventDefault()
+            const tr_parent = $(this).parents("tr").get(0)
+            tr_parent.remove()
+        });
+
+
+        cb_client.addEventListener("change", function () {
+                $.ajax({
+                    url: "get_type_user",
+                    data: {id: cb_client.value},
+                    dataType: "JSON",
+                    method: "GET",
+                    success: function (data) {
+                        $("#cb_payment").html("")
+                        $("#cb_payment").html(data.html)
+
+                    }
+                })
+        })
+
 
     </script>
 

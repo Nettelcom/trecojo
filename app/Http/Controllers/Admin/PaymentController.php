@@ -58,8 +58,8 @@ class PaymentController extends Controller
             if (count($clientsL) > 0) {
                 foreach ($clientsL as $clientL) {
                     $client_html .= "<tr>";
-
                     $client_html .= "<td>{$clientL->id}</td>";
+                    $client_html .= "<td>{$clientL->date_arrive}</td>";
                     foreach ($clients_request as $client_request) {
                         if ($client_request->id == $clientL->client_id) {
                             $client_html .= "<td>{$client_request->fisrt_name} {$client_request->last_name}</td>";
@@ -70,7 +70,7 @@ class PaymentController extends Controller
                             $client_html .= "<td>{$provider->fisrt_name}  {$provider->last_name}</td>";
                         }
                     }
-                    $client_html .= "<td>{$clientL->cost_amount}</td>";
+                    $client_html .= "<td>{$clientL->pTotal}</td>";
                     $client_html .= "<td>{$clientL->cost_provider}</td>";
                     $client_html .= "<td>{$clientL->margin}</td>";
                     foreach ($payments as $payment) {
@@ -81,7 +81,7 @@ class PaymentController extends Controller
                     $client_html .= "<td>{$clientL->start_address}</td>";
                     $client_html .= "<td>{$clientL->end_address}</td>";
                     $client_html .= "<td>{$clientL->date_request}</td>";
-                    $client_html .= "<td>{$clientL->date_arrive}</td>";
+//                    $client_html .= "<td>{$clientL->date_arrive}</td>";
                     $client_html .= "<td>{$clientL->date_end}</td>";
                     $client_html .= "</tr>";
                 }
@@ -106,7 +106,7 @@ class PaymentController extends Controller
                             $company_html .= "<td>{$provider->fisrt_name}  {$provider->last_name}</td>";
                         }
                     }
-                    $company_html .= "<td>{$companyL->cost_amount}</td>";
+                    $company_html .= "<td>{$companyL->pTotal}</td>";
                     $company_html .= "<td>{$companyL->cost_provider}</td>";
                     $company_html .= "<td>{$companyL->margin}</td>";
                     foreach ($payments as $payment) {

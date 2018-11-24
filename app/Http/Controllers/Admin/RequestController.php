@@ -2,18 +2,33 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Clients;
+use App\Company;
 use App\Request;
 use App\RequestCompany;
-use Carbon\Carbon;
 use Illuminate\Http\Request as Rq;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class RequestController extends Controller
 {
     public  function update_data_request(Rq $request) {
         $req = Request::find($request->input('idRequest'));
+
         $req->update($request->all());
+//
+        if($request->input("send_mail") == 1) {
+            $id_user = $req->client_id;
+            $client = Clients::find($id_user);
+
+//            Mail::send("email", ["client" =>$client,"request" => $request], function ( $message ) use ( $client) {
+//                    $message->from("trecojo@prueba.com");
+//                    $message->to($client->email);
+//                    $message->subject("Prueba de Trecojo");
+//            });
+        }
+
         return back();
     }
     public  function change_state_request($id) {
@@ -70,17 +85,33 @@ class RequestController extends Controller
                 $new_date_end = date('Y-m-d\TH:i', strtotime($req->date_end));
 
             }
+            if($req->paradas == "") {
+                $paradas = "vacio";
+            }else {
+                $paradas = $req->paradas;
+            }
             $response = [
                 'id' => $req->id,
                 'payment_type_id' =>   $req->payment_type_id,
                 'date_request' => $new_date_request,
                 'date_arrive' =>  $new_date_arrive,
-                'date_end' => $new_date_end
+                'date_end' => $new_date_end,
+                'peaje' => $req->peaje,
+                'parqueo' => $req->parqueo,
+                'tespera' => $req->tespera,
+                "paradas" => $paradas,
+                "obs" => $req->obs
             ];
             return response()->json([$response]);
         }
     }
     public  function update_detail_request(Rq $request) {
+
+        $paradas = $request->input("paradas");
+        $arrParadas = array();
+
+
+
         $req = Request::find($request->input('idRequest'));
 //        $req->update($req->all());
         $new_date_request = date('Y-m-d\TH:i', strtotime($request->input('date_request')));
@@ -90,8 +121,28 @@ class RequestController extends Controller
         $req->date_arrive = $new_date_arrive;
         $req->date_end = $new_date_end;
         $req->payment_type_id = $request->input('payment_type_id');
+        $req->peaje = $request->input("peaje");
+        $req->parqueo = $request->input("parqueo");
+        $req->tespera = $request->input("tespera");
+        $req->cost_provider = $req->cost_provider + $request->input("peaje") +  $request->input("parqueo") + $request->input("tespera");
+        $pTotal = $req->cost_amount +  $request->input("peaje") +  $request->input("parqueo") + $request->input("tespera");
+        $req->pTotal = $pTotal;
+        $req->obs =  $request->input("obs");
+
+        if($paradas[0] != "") {
+            for($i = 0; $i < count($paradas); $i++) {
+                $arrParadas[] = $paradas[$i];
+            }
+            $req->paradas = json_encode($arrParadas);
+        }else {
+            $req->paradas =null;
+        }
+
+
         $req->save();
         return back();
+
+
     }
 
     public  function add_request_modal_company(Rq $request) {
@@ -189,17 +240,41 @@ class RequestController extends Controller
                 $new_date_end = date('Y-m-d\TH:i', strtotime($req->date_end));
 
             }
+            if($req->paradas == "") {
+                $paradas = "vacio";
+            }else {
+                $paradas = $req->paradas;
+            }
             $response = [
                 'id' => $req->id,
                 'payment_type_id' =>   $req->payment_type_id,
                 'date_request' => $new_date_request,
                 'date_arrive' =>  $new_date_arrive,
-                'date_end' => $new_date_end
+                'date_end' => $new_date_end,
+                'peaje' => $req->peaje,
+                'parqueo' => $req->parqueo,
+                'tespera' => $req->tespera,
+                'paradas' => $paradas,
+                "obs" => $req->obs
             ];
             return response()->json([$response]);
         }
     }
     public function update_detail_request_company(Rq $request) {
+        $paradas = $request->input("paradas");
+        $arrParadas = array();
+        $parqueo = 0;
+        $pejae = 0;
+        $tpesra = 0;
+        if( $request->input("peaje") != "") {
+            $pejae = $request->input("peaje");
+        }
+        if( $request->input("parqueo") !="") {
+            $parqueo = $request->input("parqueo");
+        }
+        if( $request->input("tespera") != "") {
+            $tpesra = $request->input("tespera");
+        }
         $req = RequestCompany::find($request->input('idRequest'));
 //        $req->update($req->all());
         $new_date_request = date('Y-m-d\TH:i', strtotime($request->input('date_request')));
@@ -209,6 +284,24 @@ class RequestController extends Controller
         $req->date_arrive = $new_date_arrive;
         $req->date_end = $new_date_end;
         $req->payment_type_id = $request->input('payment_type_id');
+        $req->parqueo = $request->input('parqueo');
+        $req->peaje = $request->input('peaje');
+        $req->tespera = $request->input('tespera');
+//        $req->obs = $request->input("obs");
+//        $req->tespera = $request->input('tespera');
+        $req->cost_provider = $req->cost_provider + $parqueo + $pejae + $tpesra;
+        $pTotal = $req->cost_amount +  $parqueo + $pejae + $tpesra;
+        $req->pTotal = $pTotal;
+        $req->obs = $request->input("obs");
+
+        if($paradas[0] != "") {
+            for($i = 0; $i < count($paradas); $i++) {
+                $arrParadas[] = $paradas[$i];
+            }
+            $req->paradas = json_encode($arrParadas);
+        }else {
+            $req->paradas =null;
+        }
         $req->save();
         return back();
     }
@@ -224,25 +317,19 @@ class RequestController extends Controller
 //        $reqsClients = Request::where("is_view", 0)->get();
 //        $reqsCompanies= RequestCompany::where("is_view", 0)->get();
         $date = date("Y-m-d");
-        $reqsClients = DB::select("SELECT * FROM requests WHERE date(date_arrive) >= '$date' and is_view = 0 ");
-        $reqsCompanies=  DB::select("SELECT * FROM requests_companies WHERE date(date_arrive) >= '$date' and is_view = 0");
+        $reqsClients = DB::select("SELECT * FROM requests WHERE date(date_arrive) >= '$date' and is_view = 0  and cost_amount is NULL and active = 1");
+        $reqsCompanies=  DB::select("SELECT * FROM requests_companies WHERE date(date_arrive) >= '$date' and is_view = 0 and active = 1  and cost_amount is NULL");
 
-        $dataClient []= ["id" => 0];
-        $dataCompany []= ["idC" => 0];
+        $dataClient = array();
+        $dataCompany = array();
         foreach ($reqsClients as $reqClient) {
 
-                    $dataClient[] =
-                        [
-                            "id" => $reqClient->id,
-                        ];
-
+            $dataClient[] = [ "id" => $reqClient->id ];
         }
 
         foreach ($reqsCompanies as $reqCompany) {
 
-                $dataCompany[] = [
-                    "idC" => $reqCompany->id,
-                ];
+                $dataCompany[] = [ "idC" => $reqCompany->id ];
 
         }
         $dataRequest = [
@@ -281,5 +368,29 @@ class RequestController extends Controller
                     return  response() ->json([$request->input('json_ids')]);
 
             }
+    }
+
+    public function newClientes() {
+        $clients = Clients::where("is_aproval", 0)->get();
+        $company = Company::where("is_aproval", 0)->get();
+        $arrNew = [
+            "clients" => count($clients),
+            "company" => count($company)
+        ];
+        return $arrNew;
+    }
+    public  function get_type_user(Rq $request) {
+        if($request->ajax()) {
+            $id = $request->input("id");
+            $types = DB::select("select type_payments.id, type_payments.type_payment from type_payments INNER  JOIN 
+                  settings_payments_user on settings_payments_user.id_payment = type_payments.id where settings_payments_user.id_user = $id");
+            $html = "<option>Tipos de Pago</option>";
+             if( count( $types) > 0 ) {
+                 foreach ( $types as $type) {
+                     $html.= "<option value='{$type->id}'>{$type->type_payment}</option>";
+                 }
+             }
+             return response()->json(["html" => $html]);
+        }
     }
 }

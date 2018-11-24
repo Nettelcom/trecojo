@@ -1,9 +1,11 @@
 <?php
     $rqController = new \App\Http\Controllers\Admin\RequestController;
     $notify =  $rqController->rememberRequest();
-    $countNotify = (count($notify["company"] )+ count($notify["client"]) - 2);
+    $countNotify = (count($notify["company"] )+ count($notify["client"]));
     $json_data = json_encode($notify);
 
+    $newClients = $rqController->newClientes();
+//        dd($newClients["clients"]);
 //?>
 
 @if (Auth::check())
@@ -48,34 +50,55 @@
             <li><a href="{{ url(config('backpack.base.route_prefix').'/request-company') }}"><i class="fa fa-info-circle"></i> <span>Solicitudes Cliente Empresa</span></a></li>
               <li><a href="{{ url(config('backpack.base.route_prefix').'/car-types') }}"><i class="fa fa-car"></i> <span>Autos</span></a></li>
              <li><a href="{{ url(config('backpack.base.route_prefix').'/providers') }}"><i class="fa fa-user-plus"></i> <span>Conductores</span></a></li>
-             <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus"></i> <span>Cliente Empresa</span></a></li>
-             <li><a href="{{ url(config('backpack.base.route_prefix').'/clients') }}"><i class="fa fa-user-plus"></i> <span>Cliente Persona</span></a></li>
+             <li><a href="{{ url(config('backpack.base.route_prefix').'/company') }}"><i class="fa fa-user-plus">
+                                         <span style="background: tomato;width: 15px; height: 15px; border-radius: 50%;;display: inline-flex; align-items: center; justify-content: center;
+font-size: 1em;position: absolute">
+                     {{--{{$newClient["clients"]}}--}}
+                                             {{$newClients["company"]}}
+
+                     </span>
+
+
+                     </i> <span style="padding-left: 10px;">Cliente Empresa</span></a></li>
+             <li><a href="{{ url(config('backpack.base.route_prefix').'/clients') }}"><i class="fa fa-user-plus">
+                     <span style="background: tomato;width: 15px; height: 15px; border-radius: 50%;;display: inline-flex; align-items: center; justify-content: center;
+font-size: 1em;position: absolute">
+                     {{--{{$newClient["clients"]}}--}}
+                         {{$newClients["clients"]}}
+
+                     </span>
+
+                     </i>
+
+
+                     <span style="padding-left: 10px;">Cliente Persona</span></a></li>
               {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/owners') }}"><i class="fa fa-users"></i> <span>Usuarios</span></a></li>--}}
              
-                <li><a href="{{ url(config('backpack.base.route_prefix').'/promo-codes') }}"><i class="fa fa-code"></i> <span>Promociones</span></a></li>
-                 <li><a href="{{ url(config('backpack.base.route_prefix').'/payments') }}"><i class="fa fa-money"></i> <span>Pagos</span></a></li>
-                 <li><a href="{{ url(config('backpack.base.route_prefix').'/show_margin') }}"><i class="fa fa-money"></i> <span>Margen de Ganancia</span></a></li>
-                 <li><a href="{{ url(config('backpack.base.route_prefix').'/general-settings') }}"><i class="fa fa-check-circle-o"></i> <span>Configuraciones</span></a></li>
+                {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/promo-codes') }}"><i class="fa fa-code"></i> <span>Promociones</span></a></li>--}}
+                 <li><a href="{{ url(config('backpack.base.route_prefix').'/payments') }}"><i class="fa fa-money"></i> <span>Ingresos</span></a></li>
+                 {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/show_margin') }}"><i class="fa fa-money"></i> <span>Margen de Ganancia</span></a></li>--}}
+              <li><a href="{{ url(config('backpack.base.route_prefix').'/Reports') }}"><i class="fa fa-bar-chart"></i> <span>Reportes</span></a></li>
+              {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/general-settings') }}"><i class="fa fa-check-circle-o"></i> <span>Configuraciones</span></a></li>--}}
 
           <!-- Users, Roles Permissions -->
-          <li class="treeview">
-            <a href="#"><i class="fa fa-group"></i> <span>User Control</span> <i class="fa fa-angle-left pull-right"></i></a>
-            <ul class="treeview-menu">
-              <li><a href="{{ url(config('backpack.base.route_prefix').'/user') }}"><i class="fa fa-user"></i> <span>Usuarios</span></a></li>
-              <li><a href="{{ url(config('backpack.base.route_prefix').'/role') }}"><i class="fa fa-group"></i> <span>Roles</span></a></li>
-              <li><a href="{{ url(config('backpack.base.route_prefix').'/permission') }}"><i class="fa fa-key"></i> <span>Permisos</span></a></li>
-            </ul>
-          </li>
+          {{--<li class="treeview">--}}
+            {{--<a href="#"><i class="fa fa-group"></i> <span>User Control</span> <i class="fa fa-angle-left pull-right"></i></a>--}}
+            {{--<ul class="treeview-menu">--}}
+              {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/user') }}"><i class="fa fa-user"></i> <span>Usuarios</span></a></li>--}}
+              {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/role') }}"><i class="fa fa-group"></i> <span>Roles</span></a></li>--}}
+              {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/permission') }}"><i class="fa fa-key"></i> <span>Permisos</span></a></li>--}}
+            {{--</ul>--}}
+          {{--</li>--}}
 
-          <li class="treeview">
-              <a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu">
-                <li><a href="{{ url(config('backpack.base.route_prefix').'/elfinder') }}"><i class="fa fa-files-o"></i> <span>File manager</span></a></li>
-                <li><a href="{{ url(config('backpack.base.route_prefix').'/backup') }}"><i class="fa fa-hdd-o"></i> <span>Backups</span></a></li>
-                <li><a href="{{ url(config('backpack.base.route_prefix').'/log') }}"><i class="fa fa-terminal"></i> <span>Logs</span></a></li>
-                <li><a href="{{ url(config('backpack.base.route_prefix').'/setting') }}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>
-              </ul>
-          </li>
+          {{--<li class="treeview">--}}
+              {{--<a href="#"><i class="fa fa-cogs"></i> <span>Advanced</span> <i class="fa fa-angle-left pull-right"></i></a>--}}
+              {{--<ul class="treeview-menu">--}}
+                {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/elfinder') }}"><i class="fa fa-files-o"></i> <span>File manager</span></a></li>--}}
+                {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/backup') }}"><i class="fa fa-hdd-o"></i> <span>Backups</span></a></li>--}}
+                {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/log') }}"><i class="fa fa-terminal"></i> <span>Logs</span></a></li>--}}
+                {{--<li><a href="{{ url(config('backpack.base.route_prefix').'/setting') }}"><i class="fa fa-cog"></i> <span>Settings</span></a></li>--}}
+              {{--</ul>--}}
+          {{--</li>--}}
 
 
 

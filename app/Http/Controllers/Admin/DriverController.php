@@ -79,7 +79,7 @@ class DriverController extends Controller
         $car->visibility_status = $visible;
         $car->idprovider = $driver_id;
         $car->save();
-        return back()->withSuccess('Se reguistró correctamente!');;
+        return back()->withSuccess('Se registró correctamente!');
     }
     public function show_img(Request $request) {
         if( $request->ajax()) {
@@ -119,15 +119,10 @@ class DriverController extends Controller
         $driver->email = $request->input('email');
 //        $driver->vehicle_id = $request->input('placa');
         $driver->contacts = $request->input('contacts');
-//        if($request->file('picture') != "") {
-//            $driver->picture = $request->file('picture')->store('public');
-//        }
+        $driver->number_acount = $request->input('number_acount');
         $driver->approval_status = $approval_status;
-
         $driver->cartype()->update([
             'type' => $request->input('type'),
-//            'base_distance' => $request->input('base_distance'),
-//            'marca'=> $request->input('marca'),
             'modelo' => $request->input('modelo'),
             'color' => $request->input('color'),
             'anio' => $request->input('anio'),
@@ -149,8 +144,6 @@ class DriverController extends Controller
         $visible = 1;
         $provider->cartype()->create([
             'type' => $request->input('type'),
-//            'base_distance' => $request->input('base_distance'),
-//            'marca'=> $request->input('marca'),
             'modelo' => $request->input('modelo'),
             'color' => $request->input('color'),
             'anio' => $request->input('anio'),

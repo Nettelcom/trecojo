@@ -81,7 +81,15 @@ Route::group([
 
     Route::post('add_company', 'CompanyController@add_company')->name('add_company');
 
+    Route::get('getTypePaymentsForCompany', 'CompanyController@getTypePaymentsForCompany')->name('getTypePaymentsForCompany');
+
+    Route::get('setPaymentCompany/{idu}/{idp}', 'CompanyController@setPaymentCompany')->name('setPaymentCompany');
+
+    Route::get('deletePaymentCompany/{idu}', 'CompanyController@deletePaymentCompany')->name('deletePaymentCompany');
+
     Route::get('delete_cars_company/{id}', 'CompanyController@delete_cars_company')->name('delete_cars_company');
+
+    Route::get('approval_status_company/{id}', 'CompanyController@approval_status_company')->name('approval_status_company');
 
     Route::post('show_car_company', 'CompanyController@show_car_company')->name('show_car_company');
 
@@ -106,11 +114,19 @@ Route::group([
 
     Route::post('add_clients', 'ClientsController@add_clients')->name('add_clients');
 
+    Route::get('getTypePaymentsForUser', 'ClientsController@getTypePaymentsForUser')->name('getTypePaymentsForUser');
+
     Route::post('get_company_user', 'ClientsController@get_company_user')->name('get_company_user');
+
+    Route::get('setPaymentUser/{idU}/{idP}', 'ClientsController@setPaymentUser')->name('setPaymentUser');
+
+    Route::get('deletePaymentUser/{idU}', 'ClientsController@deletePaymentUser')->name('deletePaymentUser');
 
     Route::post('add_clients_company', 'ClientsController@add_clients_company')->name('add_clients_company');
 
     Route::get('delete_client/{id}', 'ClientsController@delete_client')->name('delete_client');
+
+    Route::get('approval_status/{id}', 'ClientsController@approval_status')->name('approval_status');
 
     Route::post('get_information_client', 'ClientsController@get_information_client')->name('get_information_client');
 
@@ -165,6 +181,16 @@ Route::group([
     Route::post('filter_margin_payments', 'PaymentController@filter_margin_payments')->name('filter_margin_payments');
 
     Route::get('rememberRequest', 'RequestController@rememberRequest')->name('rememberRequest');
+
+    Route::get('get_type_user', 'RequestController@get_type_user')->name('get_type_user');
+
+    Route::get('Reports', 'AdminController@show_reports')->name('show_reports');
+
+    Route::post('report_clients', 'AdminController@report_clients')->name('report_clients');
+
+    Route::post('report_company', 'AdminController@report_company')->name('report_company');
+
+    Route::post('report_persona', 'AdminController@report_persona')->name('report_persona');
 
 });
 

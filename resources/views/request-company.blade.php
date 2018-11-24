@@ -45,10 +45,10 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-            <table id="example1" class="table table-bordered table-striped">
+            <table id="example1" style="width: 100%;text-align: center" class="table-striped">
                 <thead>
                 <tr>
-                    <th>#id</th>
+                    {{--<th>#id</th>--}}
                     <th>Cliente</th>
                     <th>Usuario</th>
                     <th>Conductor</th>
@@ -56,12 +56,13 @@
                     {{--<th>Fecha Pedido</th>--}}
                     {{--<th>Fecha Recojo</th>--}}
                     {{--<th>Fecha Fin</th>--}}
-                    <th>Estado</th>
-                    <th>Precio Total</th>
+                    <th>P. Total</th>
+                    <th>Valor</th>
                     <th>Pago Conductor</th>
                     <th>Margen</th>
                     <th>Origen</th>
                     <th>Destino</th>
+                    <th>¿Aceptó?</th>
                     {{--<th>Tipo de Pago</th>--}}
                     <th>Pagado?</th>
                     <th>Opciones</th>
@@ -74,7 +75,7 @@
                         {{@csrf_field()}}
                         <input type="hidden" name="idRequestC" value="{{$req_company->id}}">
                         <tr>
-                            <td>{{$req_company->id}}</td>
+                            {{--<td>{{$req_company->id}}</td>--}}
                             <td>
                                 @foreach($companies as $company)
                                     @if($req_company->company_id == $company->id)
@@ -130,6 +131,13 @@
                             {{--<td>{{$req_company->date_request}}</td>--}}
                             {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request->date_arrive}}"  name="date_arrive"></td>--}}
                             {{--<td><input type="datetime-local"class="form-control"  value="{{$request->end}}"  name="date_end"></td>--}}
+
+                            <td>{{ $req_company->pTotal }}</td>
+                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company->cost_amount}}"></td>
+                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company->cost_provider}}"></td>
+                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company->margin}}"></td>
+                            <td>{{$req_company->start_address}}</td>
+                            <td>{{$req_company->end_address}}</td>
                             <td style="text-align: center">
                                 @if($req_company->status_request == 0)
                                     <a href="{{route("change_state_request_company",[$req_company->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
@@ -137,11 +145,6 @@
                                     <a href="{{route("change_state_request_company",[$req_company->id])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                                 @endif
                             </td>
-                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company->cost_amount}}"></td>
-                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company->cost_provider}}"></td>
-                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company->margin}}"></td>
-                            <td>{{$req_company->start_address}}</td>
-                            <td>{{$req_company->end_address}}</td>
                             {{--<td>--}}
                             {{--<select class="form-control" name="payment_type_id" id="">--}}
                             {{--<option value="">Tipo de Pago</option>--}}
@@ -220,20 +223,17 @@
             <table id="example1" class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th>#id</th>
+                    {{--<th>#id</th>--}}
                     <th>Cliente</th>
-                    {{--<th>Usuario</th>--}}
+                    <th>Usuario</th>
                     <th>Conductor</th>
                     <th>Vehículo</th>
-                    {{--<th>Fecha Pedido</th>--}}
-                    {{--<th>Fecha Recojo</th>--}}
-                    {{--<th>Fecha Fin</th>--}}
-                    <th>Estado</th>
                     <th>Precio Total</th>
                     <th>Pago Conductor</th>
                     <th>Margen</th>
                     <th>Origen</th>
                     <th>Destino</th>
+                    <th>¿Aceptó?</th>
                     {{--<th>Tipo de Pago</th>--}}
                     <th>Pagado?</th>
                     <th>Opciones</th>
@@ -246,22 +246,21 @@
                         {{@csrf_field()}}
                         <input type="hidden" name="idRequestC" value="{{$req_company->id}}">
                         <tr>
-                            <td>{{$req_company->id}}</td>
+                            {{--<td>{{$req_company->id}}</td>--}}
                             <td>
                                 @foreach($companies as $company)
                                     @if($req_company->company_id == $company->id)
                                         <span style="font-size: .9em;">{{$company->r_social}}</span>
                                     @endif
-
                                 @endforeach
                             </td>
-                            {{--<td>--}}
-                                {{--@foreach($clients as $client)--}}
-                                    {{--@if($req_company->client_id == $client->id)--}}
-                                        {{--{{$client->first_name}}  {{$client->last_name}}--}}
-                                    {{--@endif--}}
-                                {{--@endforeach--}}
-                            {{--</td>--}}
+                            <td>
+                                @foreach($clients as $client)
+                                    @if($req_company->client_id == $client->id)
+                                        {{$client->first_name}}  {{$client->last_name}}
+                                    @endif
+                                @endforeach
+                            </td>
                             <td>
                                 <select class="form-control" name="provider_id" id="">
                                     <option value="">Seleccione un Conductor</option>
@@ -279,29 +278,21 @@
                                             @endif
                                         @endforeach
                                     @endforeach
-                                    {{--@foreach($providers as $provider)--}}
-                                    {{--<option value="{{$provider->id}}"--}}
-                                    {{--@if($provider->id == $req_company->provider_id)--}}
-                                    {{--selected="selected"--}}
-                                    {{--@endif--}}
-                                    {{-->{{$provider->first_name}}  {{$provider->last_name}}</option>--}}
-
-
-                                    {{--@endforeach--}}
                                 </select>
-
                             </td >
                             <td>
                                 @foreach($type_car as $t_car)
                                     @if($req_company->id_type_car == $t_car->id)
                                         {{$t_car->type_c}}
                                     @endif
-
                                 @endforeach
                             </td>
-                            {{--<td>{{$req_company->date_request}}</td>--}}
-                            {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request->date_arrive}}"  name="date_arrive"></td>--}}
-                            {{--<td><input type="datetime-local"class="form-control"  value="{{$request->end}}"  name="date_end"></td>--}}
+                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company->cost_amount}}"></td>
+                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company->cost_provider}}"></td>
+                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company->margin}}"></td>
+                            <td style="display: none"><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="pTotal" readonly="readonly" value="{{$req_company->pTotal}}"></td>
+                            <td>{{$req_company->start_address}}</td>
+                            <td>{{$req_company->end_address}}</td>
                             <td style="text-align: center">
                                 @if($req_company->status_request == 0)
                                     <a href="{{route("change_state_request_company",[$req_company->id])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
@@ -309,24 +300,6 @@
                                     <a href="{{route("change_state_request_company",[$req_company->id])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                                 @endif
                             </td>
-                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company->cost_amount}}"></td>
-                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company->cost_provider}}"></td>
-                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company->margin}}"></td>
-                            <td>{{$req_company->start_address}}</td>
-                            <td>{{$req_company->end_address}}</td>
-                            {{--<td>--}}
-                            {{--<select class="form-control" name="payment_type_id" id="">--}}
-                            {{--<option value="">Tipo de Pago</option>--}}
-                            {{--@foreach($payments as $payment)--}}
-                            {{--<option value="{{$payment->id}}"--}}
-                            {{--@if($request->payment_type_id == $payment->id)--}}
-                            {{--selected="selected"--}}
-                            {{--@endif--}}
-                            {{-->{{$payment->type_payment}}</option>--}}
-
-                            {{--@endforeach--}}
-                            {{--</select>--}}
-                            {{--</td>--}}
                             <td style="text-align: center">
                                 @if($req_company->is_paint == 0)
                                     <a  href="{{route("change_is_payment_request_company",[$req_company->id])}}"class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
@@ -492,13 +465,13 @@
                                 <label  class="col-sm-2 control-label"
                                         for="inputEmail3">Tipo de Pago</label>
                                 <div class="col-sm-10">
-                                    <select class="form-control" name="payment_type_id" id="">
+                                    <select class="form-control" name="payment_type_id" id="payment_type">
                                         <option value="">Tipo de Pago</option>
-                                        @foreach($payments as $payment)
-                                            <option class="" value="{{$payment->id}}">
-                                                {{$payment->type_payment}}
-                                            </option>
-                                        @endforeach
+                                        {{--@foreach($payments as $payment)--}}
+                                            {{--<option class="" value="{{$payment->id}}">--}}
+                                                {{--{{$payment->type_payment}}--}}
+                                            {{--</option>--}}
+                                        {{--@endforeach--}}
                                     </select>
                                 </div>
                             </div>
@@ -621,6 +594,61 @@
                             <div class="col-sm-10">
                                 <input type="datetime-local"  name="date_end" class="form-control"
                                        id="date_end_detail" placeholder="Confirme Contraseña"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Peaje</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="peaje" class="form-control"
+                                       id="peaje" placeholder="Peaje"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Parqueo</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="parqueo" class="form-control"
+                                       id="parqueo" placeholder="Parqueo"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Tiempo de Espera</label>
+                            <div class="col-sm-10">
+                                <input type="text"  name="tespera" class="form-control"
+                                       id="tespera" placeholder="Tiempo de Espera"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Destino   </label>
+
+                            <div class="col-sm-8" id="div_content">
+                                {{--<div class="col-sm-12" >--}}
+                                <table id="tbl_paradas" class="table table-striped">
+                                    <tr class="paradas">
+                                        <td> <input type="text"  name="paradas[]" class="form-control"
+                                                    id="parada" placeholder="Agregar una Parada" /></td>
+                                        <td><button class="btn btn-danger delete_parada ocultar_btn"><i class="fa fa-trash"></i></button></td>
+                                    </tr>
+                                </table>
+
+                                {{--</div>--}}
+
+
+                            </div>
+                            {{--<div class="col-sm-2">--}}
+                            {{--<button class="btn btn-danger btn-sm" id="delete_parada"><i class="fa fa-trash"></i></button>--}}
+
+
+                            <button class="btn btn-primary btn-sm" id="add_input_destino"><i class="fa fa-plus"></i></button>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"
+                                   for="inputPassword3">Observaciones:</label>
+                            <div class="col-sm-8" >
+                                <textarea name="obs" id="obs" cols="30"   rows="10" class="form-control"></textarea>
                             </div>
                         </div>
 
@@ -812,8 +840,9 @@
                                         </button>
                                         <input type="submit" value="Registrar" id="btn_client" class="btn btn-primary">
                                     </div>
-                        </form>
+                        </form></div>
                     </div></div><</div></div></div>
+
 
 
 
@@ -832,6 +861,8 @@
         const valid_type_payment = document.querySelectorAll('.valid_type_payment')
         for(let i = 0; i < btn_details_request.length; i++) {
             btn_details_request[i].addEventListener('click', function () {
+                $(".paradas:eq(0)").children("td").children("input").val(null)
+                $(".paradas").not(":eq(0)").remove()
                 let idC = btn_details_request[i].id
                 $.ajax({
                     url: 'get_request_company',
@@ -844,12 +875,31 @@
                                 valid_type_payment[i].selected = true
                             }
                         }
+                        console.log(data)
                         idRequest_detail.value = data[0].id
 
                         // payment_type_detail.value = data[0].payment_type_id
                         date_request_detail.value = data[0].date_request
                         date_arrive_detail.value = data[0].date_arrive
                         date_end_detail.value = data[0].date_end
+                        tespera.value = data[0].tespera
+                        parqueo.value = data[0].parqueo
+                        peaje.value = data[0].peaje
+                        obs.value = data[0].obs
+                        let arrParadas
+                        if (data[0].paradas != "vacio") {
+                            // console.log(data[0].paradas)
+                            arrParadas = JSON.parse(data[0].paradas)
+                            parada.value = arrParadas[0]
+                            for(let i = 1; i < arrParadas.length; i++) {
+                                const element_tr =  $("#tbl_paradas tbody tr:eq(0)").clone().appendTo("#tbl_paradas");
+                                element_tr.children("td").children("button").css({"display":"block"})
+                                element_tr.children("td").children("input").val(arrParadas[i])
+                            }
+                        }else {
+                        $(".paradas:eq(0)").children("td").children("input").val(null)
+                            $(".paradas").not(":eq(0)").remove()
+                        }
                     }
                 })
             })
@@ -865,6 +915,8 @@
                 let constP = cost_amount[i].parentElement.nextElementSibling.firstChild.value
 
                 cost_amount[i].parentElement.nextElementSibling.nextElementSibling.firstChild.value = costA - constP
+                cost_amount[i].parentElement.nextElementSibling.nextElementSibling.nextElementSibling.firstChild.value = costA
+
 
                 // console.log()
 
@@ -920,6 +972,8 @@
                 method: 'POST',
                 success: function (users) {
                     $("#user_cb").html(users.opts)
+                    $("#payment_type").html("")
+                    $("#payment_type").html(users.type_pa)
 
 
 
@@ -927,14 +981,14 @@
             })
         })
 
-        user_cb.addEventListener("change", function () {
-            if (user_cb.value != "empty") {
-                other_user.disabled = true
-                other_user.value = ""
-            }else {
-                other_user.disabled = false
-            }
-        })
+        // user_cb.addEventListener("change", function () {
+        //     if (user_cb.value != "empty") {
+        //         other_user.disabled = true
+        //         other_user.value = ""
+        //     }else {
+        //         other_user.disabled = false
+        //     }
+        // })
         type_car.addEventListener("change", function () {
             $.ajax({
                 url: "get_provider_data",
@@ -949,12 +1003,25 @@
         })
         courier.addEventListener('change', function () {
             if(courier.checked == true) {
-                $("#hide_1").hide()
+                // $("#hide_1").hide()
 
             }else {
-                $("#hide_1").show()
+                // $("#hide_1").show()
 
             }
         })
+        add_input_destino.addEventListener("click", function (e) {
+            e.preventDefault()
+            // alert("fds")
+            const element_tr =    $("#tbl_paradas tbody tr:eq(0)").clone().appendTo("#tbl_paradas");
+            element_tr.children("td").children("button").css({"display":"block"})
+            element_tr.children("td").children("input").val("")
+        });
+
+        $(document).on("click",".delete_parada",function(e){
+            e.preventDefault()
+            const tr_parent = $(this).parents("tr").get(0)
+            tr_parent.remove()
+        });
     </script>
 @endsection

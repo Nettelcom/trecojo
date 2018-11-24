@@ -63,15 +63,16 @@ $json_data = json_encode($notify);
                     {{--<th>Fecha Pedido</th>--}}
                     {{--<th>Fecha Recojo</th>--}}
                     {{--<th>Fecha Fin</th>--}}
-                    <th>Estado</th>
+
                     <th>Precio</th>
                     <th>Pago Conductor</th>
                     <th>Margen</th>
                     <th>Origen</th>
                     <th>Destino</th>
+                    <th>¿Aceptó?</th>
                     <th>Courier</th>
                     {{--<th>Tipo de Pago</th>--}}
-                    <th>Pagado?</th>
+                    {{--<th>Pagado?</th>--}}
                     <th>Opciones</th>
                 </tr>
                 </thead>
@@ -80,6 +81,9 @@ $json_data = json_encode($notify);
                 @for($i = 0; $i < count($request); $i++)
 
                     <form action="update_data_request" method="post">
+                        <td style="display: none"><input type="text" name="inicio" value="{{$request[$i]["start_address"]}}"></td>
+                        <td style="display: none"><input type="text" name="fin" value="{{$request[$i]["end_address"]}}"></td>
+                        <td style="display: none"><input type="text" name="send_mail" value="1"></td>
                         {{@csrf_field()}}
                         <input type="hidden" name="idRequest" value="{{$request[$i]["id"]}}">
                         <tr>
@@ -92,20 +96,6 @@ $json_data = json_encode($notify);
 
                                 @endforeach
                             </td>
-                            {{--<td><select class="form-control" name="provider_id" id="">--}}
-                                    {{--<option value="">Seleccione un Conductor</option>--}}
-                                    {{--@foreach($providers as $provider)--}}
-                                        {{--<option value="{{$provider->id}}"--}}
-                                                {{--@if($provider->id == $request[$i]["provider_id"])--}}
-                                                {{--selected="selected"--}}
-                                                {{--@endif--}}
-                                        {{-->{{$provider->first_name}}  {{$provider->last_name}}</option>--}}
-
-
-                                    {{--@endforeach--}}
-                                {{--</select>--}}
-
-                            {{--</td>--}}
                             <td>
                                 <select class="form-control" name="provider_id" id="">
                                     <option value="">Seleccione un Conductor</option>
@@ -123,15 +113,7 @@ $json_data = json_encode($notify);
                                             @endif
                                         @endforeach
                                     @endforeach
-                                    {{--@foreach($providers as $provider)--}}
-                                    {{--<option value="{{$provider->id}}"--}}
-                                    {{--@if($provider->id == $req_company->provider_id)--}}
-                                    {{--selected="selected"--}}
-                                    {{--@endif--}}
-                                    {{-->{{$provider->first_name}}  {{$provider->last_name}}</option>--}}
 
-
-                                    {{--@endforeach--}}
                                 </select>
 
 
@@ -145,10 +127,14 @@ $json_data = json_encode($notify);
                                 @endforeach
                             </td>
                             <td>{{$request[$i]["date_arrive"]}}</td>
-                            {{--<td>{{$request[$i]["date_request"]}}</td>--}}
 
-                            {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request[$i]["date_arrive"]}}"  name="date_arrive"></td>--}}
-                            {{--<td><input type="datetime-local"class="form-control"  value="{{$request[$i]["end"]}}"  name="date_end"></td>--}}
+
+                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$request[$i]["cost_amount"]}}"></td>
+                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$request[$i]["cost_provider"]}}"></td>
+                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$request[$i]["margin"]}}"></td>
+                            <td style="display: none;"><input type="hidden" size="10"  name="pTotal" {{ $request[$i]["pTotal"] }}  ></td>
+                            <td>{{$request[$i]["start_address"]}}</td>
+                            <td>{{$request[$i]["end_address"]}}</td>
                             <td style="text-align: center">
                                 @if($request[$i]["status_request"] == 0)
                                     <a href="{{route("change_state_request",[$request[$i]["id"]])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
@@ -156,11 +142,6 @@ $json_data = json_encode($notify);
                                     <a href="{{route("change_state_request",[$request[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                                 @endif
                             </td>
-                            <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$request[$i]["cost_amount"]}}"></td>
-                            <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$request[$i]["cost_provider"]}}"></td>
-                            <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$request[$i]["margin"]}}"></td>
-                            <td>{{$request[$i]["start_address"]}}</td>
-                            <td>{{$request[$i]["end_address"]}}</td>
                             <td>
                                 @if($request[$i]["is_courier"] == 0)
 
@@ -171,33 +152,20 @@ $json_data = json_encode($notify);
 
 
                             </td>
-                            {{--<td>--}}
-                            {{--<select class="form-control" name="payment_type_id" id="">--}}
-                            {{--<option value="">Tipo de Pago</option>--}}
-                            {{--@foreach($payments as $payment)--}}
-                            {{--<option value="{{$payment->id}}"--}}
-                            {{--@if($request[$i]["payment_type_id"]== $payment->id)--}}
-                            {{--selected="selected"--}}
-                            {{--@endif--}}
-                            {{-->{{$payment->type_payment}}</option>--}}
+                            {{--<td style="text-align: center">--}}
+                                {{--@if($request[$i]["is_paint"]== 0)--}}
+                                    {{--<a href="{{route("change_is_payment_request",[$request[$i]["id"]])}}" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>--}}
+                                {{--@else--}}
+                                    {{--<a href="{{route("change_is_payment_request",[$request[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>--}}
+                                {{--@endif--}}
 
-                            {{--@endforeach--}}
-                            {{--</select>--}}
                             {{--</td>--}}
-                            <td style="text-align: center">
-                                @if($request[$i]["is_paint"]== 0)
-                                    <a href="{{route("change_is_payment_request",[$request[$i]["id"]])}}" class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
-                                @else
-                                    <a href="{{route("change_is_payment_request",[$request[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
-                                @endif
-
-                            </td>
                             <td>
                                 {{--<button data-toggle="modal" data-target="#showCar" class="btn btn-success btn-edit" ><i class="fa fa-edit"></i> Grabar</button>--}}
                                 <label for="save_data"><button class="btn btn-success" title="Grabar"><i class="fa fa-save"></i></button></label>
                                 <input type="submit" value="Grabar" id="save_data" class="btn btn-success hidden">
                                 {{--<a data-toggle="modal" data-target="#detailsRequest" class="btn btn-info btn_details_request" id="{{$request[$i]["id"]}}" title="Ver Detalles" ><i class="fa fa-plus"></i></a>--}}
-                                <a href="{{route("delete_request", [$request[$i]["id"]])}}" class="btn btn-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
+                                <a href="{{route("delete_request", [ $request[$i]["id"] ])}}" class="btn btn-danger" title="Eliminar"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     </form>
@@ -236,15 +204,15 @@ $json_data = json_encode($notify);
                 {{--<th>Fecha Pedido</th>--}}
                 <th>Fecha/Hora Recojo</th>
                 {{--<th>Fecha Fin</th>--}}
-                <th>Estado</th>
                 <th>Precio</th>
                 <th>Pago Conductor</th>
                 <th>Margen</th>
                 <th>Origen</th>
                 <th>Destino</th>
+                <th>¿Aceptó?</th>
                 <th>Courier</th>
                 {{--<th>Tipo de Pago</th>--}}
-                <th>Pagado?</th>
+                {{--<th>Pagado?</th>--}}
                 <th>Opciones</th>
             </tr>
             </thead>
@@ -304,6 +272,14 @@ $json_data = json_encode($notify);
                         {{--<td>{{$req_company->date_request}}</td>--}}
                         {{--<td><input type="datetime-local"  width="50px" class="form-control" value="{{$request->date_arrive}}"  name="date_arrive"></td>--}}
                         {{--<td><input type="datetime-local"class="form-control"  value="{{$request->end}}"  name="date_end"></td>--}}
+
+                        <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company[$i]["cost_amount"]}}"></td>
+                        <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company[$i]["cost_provider"]}}"></td>
+                        <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company[$i]["margin"]}}"></td>
+                        <td style="display: none;"><input type="hidden" size="10"  name="pTotal" {{ $req_company[$i]["pTotal"] }}  ></td>
+
+                        <td>{{$req_company[$i]["start_address"]}}</td>
+                        <td>{{$req_company[$i]["end_address"]}}</td>
                         <td style="text-align: center">
                             @if($req_company[$i]["status_request"] == 0)
                                 <a href="{{route("change_state_request_company",[$req_company[$i]["id"]])}}" class="btn btn-danger btn-xs"><i class="fa fa-cogs"></i></a>
@@ -311,11 +287,6 @@ $json_data = json_encode($notify);
                                 <a href="{{route("change_state_request_company",[$req_company[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
                             @endif
                         </td>
-                        <td><input type="text" size="10" class="cost_amount" name="cost_amount" value="{{$req_company[$i]["cost_amount"]}}"></td>
-                        <td><input type="text" size="10" name="cost_provider" class="const_provide" value="{{$req_company[$i]["cost_provider"]}}"></td>
-                        <td><input type="text" size="10" style="background: #ccc; border-radius: 5px" name="margin" readonly="readonly" value="{{$req_company[$i]["margin"]}}"></td>
-                        <td>{{$req_company[$i]["start_address"]}}</td>
-                        <td>{{$req_company[$i]["end_address"]}}</td>
                         <td>
                             @if($req_company[$i]["is_courier"] == 0)
 
@@ -339,14 +310,14 @@ $json_data = json_encode($notify);
                         {{--@endforeach--}}
                         {{--</select>--}}
                         {{--</td>--}}
-                        <td style="text-align: center">
-                            @if($req_company[$i]["is_paint"]== 0)
-                                <a  href="{{route("change_is_payment_request_company",[$req_company[$i]["id"]])}}"class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>
-                            @else
-                                <a href="{{route("change_is_payment_request_company",[$req_company[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>
-                            @endif
+                        {{--<td style="text-align: center">--}}
+                            {{--@if($req_company[$i]["is_paint"]== 0)--}}
+                                {{--<a  href="{{route("change_is_payment_request_company",[$req_company[$i]["id"]])}}"class="btn btn-danger btn-xs"><i class="fa fa-remove"></i></a>--}}
+                            {{--@else--}}
+                                {{--<a href="{{route("change_is_payment_request_company",[$req_company[$i]["id"]])}}" class="btn btn-success btn-xs"><i class="fa fa-check"></i></a>--}}
+                            {{--@endif--}}
 
-                        </td>
+                        {{--</td>--}}
                         <td>
                             {{--<button data-toggle="modal" data-target="#showCar" class="btn btn-success btn-edit" ><i class="fa fa-edit"></i> Grabar</button>--}}
                             <label for="save_data"><button class="btn btn-success" title="Grabar"><i class="fa fa-save"></i></button></label>
@@ -378,6 +349,7 @@ $json_data = json_encode($notify);
                 cost_amount[i].parentElement.nextElementSibling.nextElementSibling.firstChild.value = costA - constP
 
                 // console.log()
+              cost_amount[i].parentElement.nextElementSibling.nextElementSibling.nextElementSibling.firstChild.value = costA
 
             })
             const_provide[i].addEventListener('keyup', function () {
@@ -386,6 +358,7 @@ $json_data = json_encode($notify);
                 let constP = cost_amount[i].parentElement.nextElementSibling.firstChild.value
 
                 cost_amount[i].parentElement.nextElementSibling.nextElementSibling.firstChild.value = costA - constP
+
 
             })
         }

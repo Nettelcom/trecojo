@@ -71,7 +71,7 @@
                     <th>Email</th>
                     <th>Teléfono</th>
                     <th>Direccion</th>
-                    <th>Estado</th>
+                    {{--<th>Estado</th>--}}
                     <th>Opciones</th>
                 </tr>
                 </thead>
@@ -87,24 +87,19 @@
                         <td>{{$company->phone}}</td>
                         <td>{{$company->address }}</td>
                         {{--<td><a class="imgProvider" id="{{$company->id}}" data-toggle="modal" data-target="#popUpImg">Ver Imagen</a></td>--}}
-                        <td>
-                            <?php
-                            if ($company->status == 1):
-                            ?>
-                            <a href='{{route("change_status_company",[$company->id])}}' class='btn btn-success'>Aprobado</a>
-                            <?php
-                            elseif ($company->approval_status == 0) :
-                            ?>
-                            <a  href='{{route("change_status_company",[$company->id])}}'  class="btn btn-danger btn-sm">Pendiente</a>
-                            <?php
-                            endif
-                            ?></td>
+
                         <td> <div class="input-group-btn">
                                 <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones
                                     <span class="fa fa-caret-down"></span></button>
                                 <ul class="dropdown-menu">
                                     <li><a data-target="#addCompanyUser" id="{{$company->id}}" class="addUSerc" data-toggle="modal">Agregar Usuario</a></li>
                                     <li><a  class="btn_edit btnEditCompany"  data-toggle="modal" id="{{$company->id}}" data-target="#updateCompany" href="">Editar</a></li>
+
+                                    <li>
+                                        <a data-target="#CompanyTypePayments" id="{{$company->id}}" class="addUSerc type_payment" data-toggle="modal">
+                                            Agregar Tipo de Pago
+                                        </a>
+                                    </li>
                                     <li class="divider"></li>
                                     <li><a href="{{route('delete_company', [$company->id])}}">Eliminar</a></li>
                                 </ul>
@@ -122,6 +117,93 @@
             {!! $companies ->render() !!}
         </div>
     </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <div class="box-title">Cliente Empresas Pendiente</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box">
+        <div class="box-header" style="display: flex">
+            <div class="input-group input-group-sm" style="width: 150px;">
+                {{--<input type="text" name="table_search" class="form-control pull-right" placeholder="Search">--}}
+
+                <div class="input-group-btn">
+                    {{--<button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>--}}
+                </div>
+            </div>
+            <div style="margin-left: 10px">
+                {{--<button class="btn btn-primary" data-toggle="modal" data-target="#addCompany">Agregar Empresa</button>--}}
+            </div></div>
+
+
+        <!-- /.box-header -->
+        <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>#id</th>
+                    <th>Nombre</th>
+                    <th>RUC</th>
+                    <th>Razón Social</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Direccion</th>
+                    {{--<th>Estado</th>--}}
+                    <th>Opciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                {{--{{dump($companies)}}--}}
+                @foreach($pendients as $company)
+                    <tr>
+                        <td>{{$company->id}}</td>
+                        <td>{{$company->first_name }} {{$company->last_name }}</td>
+                        <td>{{$company->ruc }}</td>
+                        <td><span style="font-size: .9em;">{{$company->r_social }}</span></td>
+                        <td>{{$company->email }}</td>
+                        <td>{{$company->phone}}</td>
+                        <td>{{$company->address }}</td>
+
+                        <td>
+                            <a href="{{route("approval_status_company", [$company->id])}}" class="btn btn-xs btn-success" title="Aceptar Solicitud"><i class="fa fa-check"></i></a>
+
+                            {{--<div class="input-group-btn">--}}
+
+                                {{--<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Opciones--}}
+                                    {{--<span class="fa fa-caret-down"></span></button>--}}
+                                {{--<ul class="dropdown-menu">--}}
+                                    {{--<li><a data-target="#addCompanyUser" id="{{$company->id}}" class="addUSerc" data-toggle="modal">Agregar Usuario</a></li>--}}
+                                    {{--<li><a  class="btn_edit btnEditCompany"  data-toggle="modal" id="{{$company->id}}" data-target="#updateCompany" href="">Editar</a></li>--}}
+                                    {{--<li class="divider"></li>--}}
+                                    {{--<li><a href="{{route('delete_company', [$company->id])}}">Eliminar</a></li>--}}
+                                {{--</ul>--}}
+                            {{--</div>--}}
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+
+                </tfoot>
+            </table>
+        </div>
+        <!-- /.box-body -->
+        <div class="box-footer clearfix">
+            {!! $companies ->render() !!}
+        </div>
+    </div>
+
+
+
+
+
+
+
 
 
 
@@ -586,6 +668,70 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="CompanyTypePayments" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+
+                </div>
+                <div class="modal-body">
+                <!-- Modal Body -->
+                <h4 class="modal-title" id="myModalLabel">
+                    Tipo de Pago Relacionados
+                </h4>
+                <table  class="table table-striped">
+                    <th>Empresas</th>
+                    <th>Quitar</th>
+                    <tbody id="myPaymets">
+
+                    </tbody>
+                </table>
+
+
+
+                <h4 class="modal-title" id="myModalLabel">
+                    Agregar Tipos de Pago
+                </h4>
+                <table  class="table table-striped">
+                    <th>Empresas</th>
+                    <th>Agregar</th>
+                    <tbody id="noPaymets">
+
+                    </tbody>
+                </table>
+
+
+
+
+
+
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default"
+                            data-dismiss="modal">
+                        Cerrar
+                    </button>
+                    <input type="submit" value="Agregar"  class="btn btn-primary">
+
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+
+
+
 @endsection
 
 @section('after_scripts')
@@ -695,5 +841,26 @@
                                 idComp.value = addUSerc[i].id
                             })
                         }
+
+                        const type_payment = document.querySelectorAll(".type_payment")
+                        for(let i = 0; i < type_payment.length; i++) {
+                            type_payment[i].addEventListener("click", function () {
+
+                                $.ajax({
+                                    url: "getTypePaymentsForCompany",
+                                    data:{id:type_payment[i].id },
+                                    type: "GET",
+                                    dataType: "JSON",
+                                    success: function (data) {
+                                        console.log(data)
+                                        $("#myPaymets").html(data.myPayments)
+                                        $("#noPaymets").html(data.noPayments)
+                                    }
+                                })
+                            })
+
+                        }
                     </script>
+
+
 @endsection
